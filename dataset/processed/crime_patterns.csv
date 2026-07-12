@@ -1,0 +1,16 @@
+pattern_id,crime_type,modus_operandi,communication,payment_method,risk_level
+PAT0001,Cyber Fraud,Fake Investment,WhatsApp,UPI,High
+PAT0002,Cyber Fraud,Loan Scam,Telegram,Bank Transfer,High
+PAT0003,Cyber Fraud,Phishing,SMS,UPI,Medium
+PAT0004,Cyber Fraud,OTP Scam,Phone Call,UPI,Low
+PAT0005,Cyber Fraud,Job Scam,WhatsApp,Bank Transfer,Low
+PAT0006,Cyber Fraud,Crypto Scam,Telegram,Crypto,High
+PAT0007,Vehicle Theft,Duplicate Key,None,None,Critical
+PAT0008,Vehicle Theft,Tow Away,None,None,Medium
+PAT0009,Burglary,Night Break-In,None,Cash,High
+PAT0010,Chain Snatching,Bike Escape,None,None,Low
+PAT0011,Murder,Personal Rivalry,Phone Call,None,Critical
+PAT0012,Drug Trafficking,Courier Network,Telegram,Cash,Critical
+PAT0013,Identity Theft,Fake Documents,Email,Bank,Critical
+PAT0014,Kidnapping,Fake Offer,Phone Call,Cash,Critical
+PAT0015,Missing Person,Unknown,Phone Call,None,Low

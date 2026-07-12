@@ -1,0 +1,7 @@
+role_id,role_name,level,can_view_all_districts,can_export,can_edit_case,can_manage_users
+ROLE01,Admin,1,True,True,True,True
+ROLE02,SP,2,True,True,True,False
+ROLE03,DSP,3,False,True,True,False
+ROLE04,Inspector,4,False,True,True,False
+ROLE05,Sub Inspector,5,False,False,True,False
+ROLE06,Constable,6,False,False,False,False

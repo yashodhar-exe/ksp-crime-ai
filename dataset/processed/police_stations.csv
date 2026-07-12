@@ -1,0 +1,101 @@
+station_id,station_name,district,city,phone
+ST0001,Ballari Police Station 1,Ballari,Ballari,0807056644
+ST0002,Dharwad Police Station 2,Dharwad,Dharwad,0804955410
+ST0003,Bengaluru Rural Police Station 3,Bengaluru Rural,Bengaluru Rural,0809602859
+ST0004,Bengaluru Rural Police Station 4,Bengaluru Rural,Bengaluru Rural,0805389605
+ST0005,Tumakuru Police Station 5,Tumakuru,Tumakuru,0806614807
+ST0006,Bengaluru Rural Police Station 6,Bengaluru Rural,Bengaluru Rural,0804475649
+ST0007,Ballari Police Station 7,Ballari,Ballari,0805440773
+ST0008,Tumakuru Police Station 8,Tumakuru,Tumakuru,0803475683
+ST0009,Shivamogga Police Station 9,Shivamogga,Shivamogga,0807880880
+ST0010,Ballari Police Station 10,Ballari,Ballari,0809687470
+ST0011,Mysuru Police Station 11,Mysuru,Mysuru,0804255105
+ST0012,Mangaluru Police Station 12,Mangaluru,Mangaluru,0805711147
+ST0013,Kalaburagi Police Station 13,Kalaburagi,Kalaburagi,0802843700
+ST0014,Ballari Police Station 14,Ballari,Ballari,0805285791
+ST0015,Dharwad Police Station 15,Dharwad,Dharwad,0808646125
+ST0016,Kalaburagi Police Station 16,Kalaburagi,Kalaburagi,0808904207
+ST0017,Belagavi Police Station 17,Belagavi,Belagavi,0808268070
+ST0018,Mysuru Police Station 18,Mysuru,Mysuru,0806805180
+ST0019,Belagavi Police Station 19,Belagavi,Belagavi,0808854380
+ST0020,Bengaluru Urban Police Station 20,Bengaluru Urban,Bengaluru Urban,0808385875
+ST0021,Tumakuru Police Station 21,Tumakuru,Tumakuru,0807247463
+ST0022,Kalaburagi Police Station 22,Kalaburagi,Kalaburagi,0803663440
+ST0023,Mangaluru Police Station 23,Mangaluru,Mangaluru,0807789573
+ST0024,Bengaluru Rural Police Station 24,Bengaluru Rural,Bengaluru Rural,0808122905
+ST0025,Belagavi Police Station 25,Belagavi,Belagavi,0803509711
+ST0026,Shivamogga Police Station 26,Shivamogga,Shivamogga,0803379670
+ST0027,Mangaluru Police Station 27,Mangaluru,Mangaluru,0803775873
+ST0028,Kalaburagi Police Station 28,Kalaburagi,Kalaburagi,0803120920
+ST0029,Mysuru Police Station 29,Mysuru,Mysuru,0805341232
+ST0030,Bengaluru Urban Police Station 30,Bengaluru Urban,Bengaluru Urban,0805493241
+ST0031,Belagavi Police Station 31,Belagavi,Belagavi,0802548756
+ST0032,Mysuru Police Station 32,Mysuru,Mysuru,0801651101
+ST0033,Mysuru Police Station 33,Mysuru,Mysuru,0803414983
+ST0034,Mysuru Police Station 34,Mysuru,Mysuru,0805336543
+ST0035,Mangaluru Police Station 35,Mangaluru,Mangaluru,0804422162
+ST0036,Belagavi Police Station 36,Belagavi,Belagavi,0809265799
+ST0037,Dharwad Police Station 37,Dharwad,Dharwad,0809866382
+ST0038,Tumakuru Police Station 38,Tumakuru,Tumakuru,0805268534
+ST0039,Belagavi Police Station 39,Belagavi,Belagavi,0804284890
+ST0040,Shivamogga Police Station 40,Shivamogga,Shivamogga,0806973950
+ST0041,Kalaburagi Police Station 41,Kalaburagi,Kalaburagi,0807906169
+ST0042,Bengaluru Urban Police Station 42,Bengaluru Urban,Bengaluru Urban,0809937048
+ST0043,Bengaluru Rural Police Station 43,Bengaluru Rural,Bengaluru Rural,0805120064
+ST0044,Bengaluru Rural Police Station 44,Bengaluru Rural,Bengaluru Rural,0804013991
+ST0045,Ballari Police Station 45,Ballari,Ballari,0806897840
+ST0046,Mangaluru Police Station 46,Mangaluru,Mangaluru,0801014530
+ST0047,Mangaluru Police Station 47,Mangaluru,Mangaluru,0801810149
+ST0048,Belagavi Police Station 48,Belagavi,Belagavi,0803633520
+ST0049,Bengaluru Rural Police Station 49,Bengaluru Rural,Bengaluru Rural,0807109278
+ST0050,Ballari Police Station 50,Ballari,Ballari,0805032939
+ST0051,Kalaburagi Police Station 51,Kalaburagi,Kalaburagi,0804183632
+ST0052,Mysuru Police Station 52,Mysuru,Mysuru,0803067334
+ST0053,Bengaluru Urban Police Station 53,Bengaluru Urban,Bengaluru Urban,0802859552
+ST0054,Ballari Police Station 54,Ballari,Ballari,0801716285
+ST0055,Kalaburagi Police Station 55,Kalaburagi,Kalaburagi,0804931499
+ST0056,Mangaluru Police Station 56,Mangaluru,Mangaluru,0809975225
+ST0057,Belagavi Police Station 57,Belagavi,Belagavi,0804431609
+ST0058,Belagavi Police Station 58,Belagavi,Belagavi,0801571446
+ST0059,Dharwad Police Station 59,Dharwad,Dharwad,0806510513
+ST0060,Bengaluru Rural Police Station 60,Bengaluru Rural,Bengaluru Rural,0801666450
+ST0061,Bengaluru Rural Police Station 61,Bengaluru Rural,Bengaluru Rural,0802290529
+ST0062,Ballari Police Station 62,Ballari,Ballari,0803112794
+ST0063,Bengaluru Rural Police Station 63,Bengaluru Rural,Bengaluru Rural,0801753320
+ST0064,Ballari Police Station 64,Ballari,Ballari,0807464697
+ST0065,Mangaluru Police Station 65,Mangaluru,Mangaluru,0807865704
+ST0066,Kalaburagi Police Station 66,Kalaburagi,Kalaburagi,0802341674
+ST0067,Belagavi Police Station 67,Belagavi,Belagavi,0803426077
+ST0068,Mysuru Police Station 68,Mysuru,Mysuru,0807331888
+ST0069,Mangaluru Police Station 69,Mangaluru,Mangaluru,0807682014
+ST0070,Mangaluru Police Station 70,Mangaluru,Mangaluru,0802953628
+ST0071,Bengaluru Rural Police Station 71,Bengaluru Rural,Bengaluru Rural,0807304041
+ST0072,Mangaluru Police Station 72,Mangaluru,Mangaluru,0808263719
+ST0073,Bengaluru Rural Police Station 73,Bengaluru Rural,Bengaluru Rural,0809412600
+ST0074,Mangaluru Police Station 74,Mangaluru,Mangaluru,0809539569
+ST0075,Shivamogga Police Station 75,Shivamogga,Shivamogga,0804712924
+ST0076,Kalaburagi Police Station 76,Kalaburagi,Kalaburagi,0803117975
+ST0077,Belagavi Police Station 77,Belagavi,Belagavi,0804402952
+ST0078,Belagavi Police Station 78,Belagavi,Belagavi,0808450191
+ST0079,Bengaluru Rural Police Station 79,Bengaluru Rural,Bengaluru Rural,0804272044
+ST0080,Bengaluru Rural Police Station 80,Bengaluru Rural,Bengaluru Rural,0804213126
+ST0081,Bengaluru Urban Police Station 81,Bengaluru Urban,Bengaluru Urban,0809574313
+ST0082,Belagavi Police Station 82,Belagavi,Belagavi,0809934136
+ST0083,Tumakuru Police Station 83,Tumakuru,Tumakuru,0806216958
+ST0084,Belagavi Police Station 84,Belagavi,Belagavi,0805829363
+ST0085,Mysuru Police Station 85,Mysuru,Mysuru,0803293760
+ST0086,Bengaluru Rural Police Station 86,Bengaluru Rural,Bengaluru Rural,0807063984
+ST0087,Mysuru Police Station 87,Mysuru,Mysuru,0801361252
+ST0088,Dharwad Police Station 88,Dharwad,Dharwad,0805196582
+ST0089,Tumakuru Police Station 89,Tumakuru,Tumakuru,0808918108
+ST0090,Kalaburagi Police Station 90,Kalaburagi,Kalaburagi,0801668257
+ST0091,Mangaluru Police Station 91,Mangaluru,Mangaluru,0809490483
+ST0092,Ballari Police Station 92,Ballari,Ballari,0804869933
+ST0093,Mangaluru Police Station 93,Mangaluru,Mangaluru,0806298240
+ST0094,Kalaburagi Police Station 94,Kalaburagi,Kalaburagi,0801577414
+ST0095,Kalaburagi Police Station 95,Kalaburagi,Kalaburagi,0803989851
+ST0096,Ballari Police Station 96,Ballari,Ballari,0809014155
+ST0097,Belagavi Police Station 97,Belagavi,Belagavi,0804343987
+ST0098,Belagavi Police Station 98,Belagavi,Belagavi,0808226379
+ST0099,Tumakuru Police Station 99,Tumakuru,Tumakuru,0805590885
+ST0100,Tumakuru Police Station 100,Tumakuru,Tumakuru,0802327371
