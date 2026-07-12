@@ -14,9 +14,12 @@ Notes:
 
 import os
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, table
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ksp_crime")
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL",
+    "postgresql://postgres:postgres@localhost:5433/ksp_crime"
+)
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "processed")
 
 # Parents first, then children that reference them, per foreign keys.
@@ -43,16 +46,49 @@ LOAD_ORDER = [
 ]
 
 def main():
-    engine = create_engine(DATABASE_URL)
-    with engine.connect() as conn:
-        for table in LOAD_ORDER:
-            path = os.path.join(PROCESSED_DIR, f"{table}.csv")
-            if not os.path.exists(path):
-                print(f"skip: {table}.csv not found")
-                continue
-            df = pd.read_csv(path)
-            df.to_sql(table, conn, if_exists="append", index=False, method="multi", chunksize=1000)
-            print(f"loaded {table}: {len(df)} rows")
+    print("DATABASE_URL:", DATABASE_URL)
 
+    engine = create_engine(DATABASE_URL)
+
+    with engine.begin() as conn:
+        for table in LOAD_ORDER:
+
+            path = os.path.join(PROCESSED_DIR, f"{table}.csv")
+
+            if not os.path.exists(path):
+                print(f"Skip: {table}.csv not found")
+                continue
+
+            print(f"\nLoading {table}...")
+
+            df = pd.read_csv(path)
+
+            # Fix missing injury_level values
+            # Victims
+            if table == "victims":
+                df["injury_level"] = df["injury_level"].fillna("Unknown")
+
+# Criminal relationships
+            if table == "criminal_relationships":
+                df = df[df["citizen_1"] != df["citizen_2"]]
+
+# Remove duplicate rows from every table
+                df = df.drop_duplicates()
+            try:
+                df.to_sql(
+                    table,
+                    conn,
+                    if_exists="append",
+                    index=False,
+                    method="multi",
+                    chunksize=1000,
+                )
+
+                print(f"✅ Loaded {table}: {len(df)} rows")
+
+            except Exception as e:
+                print(f"\n❌ Failed while loading {table}")
+                print(e)
+                raise
 if __name__ == "__main__":
     main()
