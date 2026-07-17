@@ -1,0 +1,26 @@
+# Karnataka State Police AI Crime Analytics & Investigation Platform - PRD
+
+## Overview
+A high-fidelity investigative suite for law enforcement professionals to analyze crime patterns, manage cases, and perform network analysis.
+
+## Screen List & Flow
+1. **Login Page**: Secure entry with Karnataka Police branding.
+2. **Dashboard**: High-level KPIs, AI alerts, and district-wide trends.
+3. **Cases Management**: Advanced filtering and search for FIR records.
+4. **Case Details**: Deep dive into victims, suspects, timeline, and evidence.
+5. **Citizens Module**: 360-degree view of individuals and their criminal relationships.
+6. **Officer Management**: Performance tracking and case assignments.
+7. **Search Intelligence**: Global unified search across multiple identifiers (Aadhaar, Phone, etc.).
+8. **Criminal Network Analysis**: Visual graph of relationships and risk scores.
+9. **Analytics Dashboard**: Geospatial heatmaps and predictive crime modeling.
+10. **AI Investigation Assistant**: Conversational interface for case insights.
+11. **Evidence Management**: Chain of custody and digital asset repository.
+12. **Timeline View**: Chronological investigation milestones.
+13. **User Management**: RBAC and audit logs for the department.
+14. **Settings**: Platform configuration and security.
+
+## Design Principles
+- **Clarity over Decoration**: Focus on data density and legibility.
+- **AI-First**: Dedicated space for AI summaries and suggestions.
+- **Auditability**: Clear timestamps and officer attribution.
+- **Scalability**: Responsive grid system for desktop workstations.

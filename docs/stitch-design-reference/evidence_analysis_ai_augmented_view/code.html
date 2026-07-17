@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Investigative Suite | Evidence Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@450&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-border-glow {
+            border: 1px solid transparent;
+            background: linear-gradient(to right, white, white), linear-gradient(to right, #8B5CF6, #324381);
+            background-clip: padding-box, border-box;
+            background-origin: padding-box, border-box;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .zebra-table tr:nth-child(even) {
+            background-color: #f1f5f9;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0b1f5e",
+                        "tertiary-container": "#481400",
+                        "on-primary-fixed-variant": "#324381",
+                        "on-secondary-fixed": "#001551",
+                        "tertiary-fixed": "#ffdbce",
+                        "on-tertiary-fixed": "#370d00",
+                        "on-tertiary-fixed-variant": "#74341a",
+                        "on-tertiary-container": "#c97758",
+                        "on-background": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "primary": "#000b38",
+                        "on-primary-fixed": "#001453",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface": "#f8f9ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container-low": "#eff4ff",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "secondary-fixed": "#dce1ff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#250700",
+                        "surface-tint": "#4b5b9b",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "secondary": "#1d4ed8",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#4069f2",
+                        "surface-variant": "#d3e4fe",
+                        "outline": "#757681",
+                        "outline-variant": "#c6c5d2",
+                        "on-secondary-fixed-variant": "#0039b5",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b7c4ff",
+                        "on-primary-container": "#7989cd",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#b7c4ff",
+                        "on-surface-variant": "#454650",
+                        "inverse-on-surface": "#eaf1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "standard": "16px",
+                        "loose": "24px",
+                        "tight": "8px",
+                        "container-margin": "32px",
+                        "compact": "12px",
+                        "base": "4px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["JetBrains Mono"],
+                        "title-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["12px", {"lineHeight": "16px", "fontWeight": "450"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full w-[260px] bg-primary-container flex flex-col z-50">
+<div class="p-6 flex items-center gap-3">
+<img alt="Department Seal" class="w-10 h-10 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuko_1wdFhDABqW96_So3IOU1W4Jo5je34lfIRiDWKJkE-klL-DQCS49sNLPnjjQtCo2I48Av6TlJlRk0jeuTaril-9w5VWSFgiUu445dTtoyeBr6dduMNFB4IjZi6dDwjxrNFDZDbuOKYEtCj0XGlepHZoIFRGPHNWkZfr8bX9mqlWHZFYkmZUB36JVDnHSNAsgTOx2nlz1qPUf0q0NlXVzBTwObtZZkz0_lguNlZx4Pvi1id5Qr5-DQ"/>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm font-bold text-on-primary">Investigative Suite</span>
+<span class="text-[10px] uppercase tracking-widest text-on-primary/60">Department of Justice</span>
+</div>
+</div>
+<nav class="flex-1 px-3 space-y-1 overflow-y-auto custom-scrollbar">
+<!-- Nav Item: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<!-- Nav Item: Cases -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="folder_shared">folder_shared</span>
+<span class="font-body-md">Cases</span>
+</a>
+<!-- Nav Item: Intelligence -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-body-md">Intelligence</span>
+</a>
+<!-- Nav Item: Evidence (ACTIVE) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary bg-secondary-container/20 border-l-4 border-secondary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md font-bold">Evidence</span>
+</a>
+<!-- Nav Item: Archives -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="archive">archive</span>
+<span class="font-body-md">Archives</span>
+</a>
+<!-- Nav Item: Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<!-- Nav Item: Stations -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-body-md">Stations</span>
+</a>
+<!-- Nav Item: Officers -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="font-body-md">Officers</span>
+</a>
+<!-- Nav Item: Settings -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary/60 hover:text-on-primary hover:bg-on-primary-fixed-variant transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-on-primary/10">
+<div class="flex items-center gap-3 px-4 py-3 bg-white/5 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-white font-bold">JD</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-primary">Insp. John Doe</span>
+<span class="text-[10px] text-on-primary/40">ID: #45920-K</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col ml-[260px]">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center h-16 w-full px-8 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-6 flex-1">
+<span class="font-headline-md text-headline-md font-bold text-primary">CRIME ANALYTICS AI</span>
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container-low border border-outline-variant rounded-full text-body-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all" placeholder="Search evidence repository..." type="text"/>
+</div><div class="flex items-center gap-2 px-3 py-1 bg-error-container/20 border border-error/10 rounded-full animate-pulse">
+<span class="material-symbols-outlined text-error text-sm">emergency</span>
+<span class="text-[10px] font-bold text-error uppercase tracking-wider">Live Alert: New evidence uploaded to Case #2024-88A</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-all">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<span class="font-title-sm text-title-sm text-primary font-bold">DIGITAL ASSET VIEW</span>
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded uppercase">Restricted</span>
+</div>
+</div>
+</header>
+<!-- Viewport Content -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Central Evidence Viewer -->
+<div class="flex-1 flex flex-col bg-surface-container-lowest p-6 overflow-y-auto custom-scrollbar">
+<!-- Breadcrumbs & Actions -->
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant text-body-sm">
+<span class="hover:text-primary cursor-pointer">Case #2024-88A</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="font-bold text-on-surface">Digital Evidence Depot</span>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg text-body-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm">download</span> Export
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-body-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">share</span> Report
+                        </button>
+</div>
+</div>
+<!-- High-Resolution Media Stage -->
+<div class="relative flex-1 min-h-[500px] bg-black rounded-xl overflow-hidden group shadow-lg flex flex-col">
+<!-- Media Header Overlay -->
+<div class="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/60 to-transparent z-10 flex justify-between items-start">
+<div class="flex flex-col">
+<h2 class="text-white font-bold text-lg">IMG_004_FORENSIC_SCENE.RAW</h2>
+<p class="text-white/60 text-xs font-mono-data">Resolution: 8192 x 5464 | SHA-256: 8a3f...d92c</p>
+</div>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded bg-black/40 text-white hover:bg-black/60 flex items-center justify-center backdrop-blur-md"><span class="material-symbols-outlined text-sm">zoom_in</span></button>
+<button class="w-8 h-8 rounded bg-black/40 text-white hover:bg-black/60 flex items-center justify-center backdrop-blur-md"><span class="material-symbols-outlined text-sm">fullscreen</span></button>
+</div>
+</div>
+<!-- Main Image View -->
+<div class="flex-1 flex items-center justify-center overflow-hidden">
+<img class="max-w-full max-h-full object-contain opacity-90 transition-opacity duration-700 hover:opacity-100" data-alt="A high-resolution, professional forensic photograph of a dimly lit interior crime scene. The image displays a detailed view of a hardwood floor with multiple numbered evidence markers near a discarded digital device. The lighting is focused and clinical, casting sharp shadows, while the overall aesthetic is cold, analytical, and somber, aligning with a high-stakes investigative environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyujUxS9m3bQEh7I81kg5gl29X1I4Thdd-2doz9DwzmODNRvtzezJ0EDE3dHAtH5sZ3dlAbJ7Y4316WDylCfWz3qhw7zNxM7rF3ijUEelcjmGxiKxZ_H5YGTMKEPchzITASXjP06Yrnjr5QsNKrwIdet8ZqjA5x9kbBJZ7m9uPvSgRNIWSFdiqAHPHlnF5wCdOsHmWPXMr4N93OrxRVx1yU_FSPOJMNGbpZtkcEj2kA_zeQCWW_fvY8d1cuFxKkTYRpoMEAOUB_g"/>
+</div>
+<!-- Media Controls Overlay -->
+<div class="p-4 bg-black/40 backdrop-blur-md flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-white/80 hover:text-white"><span class="material-symbols-outlined">skip_previous</span></button>
+<button class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center"><span class="material-symbols-outlined">play_arrow</span></button>
+<button class="text-white/80 hover:text-white"><span class="material-symbols-outlined">skip_next</span></button>
+</div>
+<div class="flex-1 h-1 bg-white/20 rounded-full relative cursor-pointer">
+<div class="absolute inset-y-0 left-0 bg-secondary w-1/3 rounded-full"></div>
+</div>
+<span class="text-white/60 font-mono-data text-xs">00:12 / 01:45</span>
+</div>
+</div>
+<!-- Evidence Classification Grid -->
+<div class="grid grid-cols-3 gap-6 mt-6"><div class="col-span-1 p-6 bg-surface-container-low border border-outline-variant rounded-xl flex flex-col gap-4">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-secondary">biometric_setup</span>
+<span class="font-title-sm">AI Forensic Analysis</span>
+</div>
+<div class="space-y-3">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded">Weapons</span>
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded">Vehicles</span>
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] font-bold rounded">Faces</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Location Confidence</span>
+<span class="font-mono-data text-green-500 font-bold">98%</span>
+</div>
+<div class="flex items-center gap-2 p-2 bg-error-container/10 border border-error/10 rounded">
+<span class="material-symbols-outlined text-error text-sm">visibility</span>
+<span class="text-error text-[11px] font-bold">Suspicious activity: Detected</span>
+</div>
+</div>
+</div>
+<!-- Upload Zone -->
+<div class="col-span-1 p-6 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center gap-3 hover:border-secondary/40 hover:bg-secondary/5 transition-all cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-3xl">cloud_upload</span>
+</div>
+<div class="text-center">
+<p class="font-bold text-body-md">Upload Evidence</p>
+<p class="text-body-sm text-on-surface-variant">Drag and drop or browse files</p>
+</div>
+<div class="w-full mt-2">
+<div class="flex justify-between text-[10px] mb-1 text-on-surface-variant">
+<span>Batch: Forensic_A</span>
+<span>75%</span>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-secondary"></div>
+</div>
+</div>
+</div>
+<!-- AI Insights Panel -->
+<div class="col-span-2 p-6 ai-border-glow rounded-xl bg-white shadow-sm flex flex-col gap-4">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-secondary">auto_awesome</span>
+<span class="font-title-sm">AI Forensic Insights</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 bg-error-container/20 rounded-lg border border-error/10">
+<span class="material-symbols-outlined text-error mt-0.5">warning</span>
+<div>
+<p class="font-bold text-error text-body-sm">Anomalous Metadata Detected in Image 04</p>
+<p class="text-on-surface-variant text-body-sm">EXIF data suggests the timestamp was modified 48 hours after original capture. Discrepancy: +4.2s.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 bg-secondary/5 rounded-lg border border-secondary/10">
+<span class="material-symbols-outlined text-secondary mt-0.5">query_stats</span>
+<div>
+<p class="font-bold text-secondary text-body-sm">Cross-Case Correlation: CCTV Footprint Match</p>
+<p class="text-on-surface-variant text-body-sm">Visual patterns in Subject B's gait match Case #2023-412 (Central Bank Incident) with 89% confidence.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-2 border-t border-outline-variant flex justify-between items-center">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-mono-data">Engine: NeuralForensics v4.2</span>
+<button class="text-secondary text-xs font-bold hover:underline">View Verification Path</button>
+</div>
+</div>
+<div class="col-span-3 p-6 bg-primary-container text-on-primary rounded-xl flex flex-col gap-4">
+<div class="flex items-center gap-2 font-bold">
+<span class="material-symbols-outlined text-inverse-primary">lightbulb</span>
+<span class="font-title-sm">AI Recommendations</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="p-3 bg-white/5 rounded-lg border border-white/10">
+<p class="text-[11px] font-bold uppercase tracking-wider text-on-primary/60 mb-1">Next Step 01</p>
+<p class="text-body-sm">Cross-reference detected faces with national database.</p>
+</div>
+<div class="p-3 bg-white/5 rounded-lg border border-white/10">
+<p class="text-[11px] font-bold uppercase tracking-wider text-on-primary/60 mb-1">Next Step 02</p>
+<p class="text-body-sm">Enhance resolution on frame 04:22 for license plate ID.</p>
+</div>
+<div class="p-3 bg-white/5 rounded-lg border border-white/10">
+<p class="text-[11px] font-bold uppercase tracking-wider text-on-primary/60 mb-1">Next Step 03</p>
+<p class="text-body-sm">Request physical search warrant for GPS coordinates.</p>
+</div>
+</div>
+</div></div>
+</div>
+<!-- Right Sidebar: Metadata & Chain of Custody -->
+<aside class="w-80 bg-white border-l border-outline-variant flex flex-col overflow-hidden">
+<div class="p-6 border-b border-outline-variant">
+<h3 class="font-title-sm text-title-sm font-bold text-primary mb-4">Chain of Custody</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-[10px] font-bold rounded-full border border-outline-variant uppercase">Digital</span>
+<span class="px-3 py-1 bg-error-container/20 text-error text-[10px] font-bold rounded-full border border-error/10 uppercase">Critical</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
+<!-- Verification Logs -->
+<section>
+<h4 class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-4">Verification Logs</h4>
+<div class="space-y-4 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant">
+<!-- Log Item -->
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-green-500 border-2 border-white ring-1 ring-green-500/30"></div>
+<p class="font-bold text-body-sm">Asset Verified</p>
+<p class="text-body-sm text-on-surface-variant">Verified by Forensic Lab Unit 4</p>
+<p class="text-[10px] font-mono-data text-on-surface-variant mt-1">2024-10-24 14:22:10 UTC</p>
+</div>
+<!-- Log Item -->
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-secondary border-2 border-white ring-1 ring-secondary/30"></div>
+<p class="font-bold text-body-sm">Access Granted</p>
+<p class="text-body-sm text-on-surface-variant">Inspector John Doe accessed for review</p>
+<p class="text-[10px] font-mono-data text-on-surface-variant mt-1">2024-10-24 11:05:44 UTC</p>
+</div>
+<!-- Log Item -->
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full bg-surface-dim border-2 border-white ring-1 ring-outline-variant"></div>
+<p class="font-bold text-body-sm">Deposition</p>
+<p class="text-body-sm text-on-surface-variant">Uploaded to Digital Depot by Officer Sam</p>
+<p class="text-[10px] font-mono-data text-on-surface-variant mt-1">2024-10-23 09:15:22 UTC</p>
+</div>
+</div>
+</section>
+<!-- Metadata -->
+<section>
+<h4 class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-4">Technical Metadata</h4>
+<table class="w-full text-left text-body-sm zebra-table border-collapse">
+<tbody>
+<tr class="h-8 border-b border-outline-variant">
+<td class="text-on-surface-variant py-1">Device</td>
+<td class="font-mono-data text-primary py-1">Sony Alpha A7R</td>
+</tr>
+<tr class="h-8 border-b border-outline-variant">
+<td class="text-on-surface-variant py-1">Aperture</td>
+<td class="font-mono-data text-primary py-1">f/2.8</td>
+</tr>
+<tr class="h-8 border-b border-outline-variant">
+<td class="text-on-surface-variant py-1">ISO</td>
+<td class="font-mono-data text-primary py-1">3200</td>
+</tr>
+<tr class="h-8 border-b border-outline-variant">
+<td class="text-on-surface-variant py-1">Focal L.</td>
+<td class="font-mono-data text-primary py-1">35mm</td>
+</tr>
+<tr class="h-8 border-b border-outline-variant">
+<td class="text-on-surface-variant py-1">GPS</td>
+<td class="font-mono-data text-primary py-1">12.9716, 77.5946</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<div class="p-6 bg-surface-container-low border-t border-outline-variant">
+<button class="w-full py-3 bg-white border border-outline-variant rounded-lg text-primary font-bold text-body-sm flex items-center justify-center gap-2 hover:bg-surface transition-all">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+                        Verify Digital Signature
+                    </button>
+</div>
+</aside>
+</div>
+</main>
+<script>
+        // Micro-interactions for metadata table rows
+        document.querySelectorAll('.zebra-table tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.classList.add('bg-secondary/5');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.classList.remove('bg-secondary/5');
+            });
+        });
+
+        // Simple mock for "scanning" effect
+        const mediaStage = document.querySelector('.relative.flex-1');
+        const scanner = document.createElement('div');
+        scanner.className = 'absolute top-0 left-0 w-full h-[2px] bg-secondary shadow-[0_0_15px_rgba(29,78,216,0.8)] z-20 pointer-events-none opacity-0';
+        mediaStage.appendChild(scanner);
+
+        let scanning = false;
+        mediaStage.addEventListener('click', () => {
+            if (scanning) return;
+            scanning = true;
+            scanner.style.opacity = '1';
+            let pos = 0;
+            const animate = () => {
+                pos += 2;
+                scanner.style.top = pos + 'px';
+                if (pos < mediaStage.offsetHeight) {
+                    requestAnimationFrame(animate);
+                } else {
+                    scanner.style.opacity = '0';
+                    scanning = false;
+                }
+            };
+            requestAnimationFrame(animate);
+        });
+    </script>
+</body></html>

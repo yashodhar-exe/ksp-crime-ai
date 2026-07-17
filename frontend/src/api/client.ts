@@ -1,0 +1,79 @@
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
+
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "/api/v1";
+
+export const client = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+const ACCESS_TOKEN_KEY = "ksp_access_token";
+const REFRESH_TOKEN_KEY = "ksp_refresh_token";
+
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+export function getRefreshToken() {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+export function setTokens(access: string, refresh: string) {
+  localStorage.setItem(ACCESS_TOKEN_KEY, access);
+  localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
+}
+export function clearTokens() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+}
+
+client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = getAccessToken();
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+let refreshInFlight: Promise<string | null> | null = null;
+
+async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return null;
+  try {
+    const res = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+      refresh_token: refreshToken,
+    });
+    const { access_token, refresh_token } = res.data;
+    setTokens(access_token, refresh_token);
+    return access_token;
+  } catch {
+    clearTokens();
+    return null;
+  }
+}
+
+client.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const original = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
+
+    if (error.response?.status === 401 && original && !original._retry) {
+      original._retry = true;
+      if (!refreshInFlight) {
+        refreshInFlight = refreshAccessToken().finally(() => {
+          refreshInFlight = null;
+        });
+      }
+      const newToken = await refreshInFlight;
+      if (newToken) {
+        original.headers = original.headers ?? {};
+        original.headers.Authorization = `Bearer ${newToken}`;
+        return client(original);
+      }
+      // refresh failed — force re-login
+      clearTokens();
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);

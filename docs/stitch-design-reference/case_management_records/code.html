@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case Management - KSP AI Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@450&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item {
+            opacity: 1 !important;
+            font-weight: 700 !important;
+        }
+        /* Custom scrollbar for high-density data */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* AI Insight Border Glow */
+        .ai-insight-glow {
+            border: 1px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(to right, #8B5CF6, #0B1F5E);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#001453",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-surface-variant": "#454650",
+                        "surface-variant": "#d3e4fe",
+                        "on-secondary-fixed": "#001551",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed": "#dce1ff",
+                        "on-surface": "#0b1c30",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-container": "#481400",
+                        "secondary-container": "#4069f2",
+                        "on-error-container": "#93000a",
+                        "secondary": "#1d4ed8",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#370d00",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed-variant": "#0039b5",
+                        "on-secondary-container": "#fffbff",
+                        "inverse-primary": "#b7c4ff",
+                        "surface-tint": "#4b5b9b",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#74341a",
+                        "tertiary": "#250700",
+                        "primary-fixed": "#dde1ff",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "on-tertiary-container": "#c97758",
+                        "outline": "#757681",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface": "#f8f9ff",
+                        "primary": "#000b38",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#b7c4ff",
+                        "outline-variant": "#c6c5d2",
+                        "inverse-surface": "#213145",
+                        "on-primary-container": "#7989cd",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "primary-container": "#0b1f5e",
+                        "on-primary-fixed-variant": "#324381",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "surface-container": "#e5eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "loose": "24px",
+                        "base": "4px",
+                        "compact": "12px",
+                        "container-margin": "32px",
+                        "standard": "16px",
+                        "sidebar-width": "260px",
+                        "tight": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "mono-data": ["12px", {"lineHeight": "16px", "fontWeight": "450"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-background overflow-hidden">
+<!-- SideNavBar -->
+<aside class="w-[260px] h-full fixed left-0 top-0 bg-primary-container border-r border-outline-variant flex flex-col py-standard z-50">
+<div class="px-loose mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-on-primary-fixed flex items-center justify-center">
+<img class="w-8 h-8 object-contain" data-alt="Karnataka Police Emblem featuring the Gandaberunda against a rich navy blue background, sharp vector details, professional government branding, gold and red accents, high contrast corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoGiloKSm8Nlpivlljv5B8Fu-8VNiFGg42BT_bkJhsgjcMqOCLybqqWgbKtI4gydzGzGNuIxIguECGhRnmn62ahuv4oVrX5guPym_MUXYBeIMx8Tggk25pVyhoJ2sM7KHR5CqC8u32TI8j4qqKK17deSRUZFe6HRNQxX0kyDaBm6Tkbzg6Tgq_NEwxZ0Sa5t3qyYhZOG2hqBSdyfNK0SvO_JgkqQ-JCKOgcvJ26vWgXjtkejJFECX3g6QnbNrusxHFMuGKAEZrvQ"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary-container leading-none">KSP AI platform</h1>
+<p class="font-label-caps text-label-caps text-on-primary-container opacity-60">Analytical Unit</p>
+</div>
+</div>
+<nav class="flex-1 px-compact space-y-1">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant transition-opacity group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<!-- ACTIVE TAB: Cases -->
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-secondary-container font-bold bg-secondary-container/20 border-r-4 border-secondary-container transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_shared</span>
+<span class="font-label-caps text-label-caps">Cases</span>
+</a>
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+<span class="font-label-caps text-label-caps">Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label-caps text-label-caps">Evidence</span>
+</a>
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-caps text-label-caps">Archives</span>
+</a>
+<a class="flex items-center gap-3 px-loose py-3 rounded text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="font-label-caps text-label-caps">Analytics</span>
+</a>
+</nav>
+<div class="px-compact mt-auto space-y-4">
+<button class="w-full bg-on-primary-fixed text-on-primary py-3 rounded-lg font-title-sm text-title-sm flex items-center justify-center gap-2 shadow-sm hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">add</span>
+                New Investigation
+            </button>
+<div class="border-t border-outline-variant pt-4 space-y-1">
+<a class="flex items-center gap-3 px-loose py-2 text-on-primary-container opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-loose py-2 text-on-primary-container opacity-60 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-[260px] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-loose z-40">
+<div class="flex items-center gap-6">
+<h2 class="font-title-sm text-title-sm font-bold text-primary">Crime Analytics Platform</h2>
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 w-80 text-body-md focus:ring-1 focus:ring-primary-container" placeholder="Search case numbers, suspects..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">help</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="text-right">
+<p class="font-title-sm text-title-sm text-on-surface leading-none">Insp. Arjun Rao</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Zone 4 Command</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-outline-variant object-cover" data-alt="Professional portrait of a senior law enforcement officer in a sharp uniform, clean studio background, medium lighting, high-quality professional photography for enterprise software user profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTvn_v4qg7zjqOhE1wz0Iw-MGd-chZVmT3t6-ehSTsyflY4HLVK1mH1qBbXRt2ArwT7kmxWA6PMwu-bLOujfMHocum5YkZMyddub7tohUBa4F9A9qmtRtIUpp0DsFLBAZ_WOIJZ4rHE_3MqQ-LQpPIBR01H9Th5VJcSYb7NIfDj_Dyw1iFGE7br4pdY3mJpms2JwsFzrddERvREc3Ft-pav6XO_jvxQWzbskBERSQBsfIGgqIOfuxfh-nuMV0IgKM9QN-iQjQz5w"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[260px] mt-16 p-loose h-[calc(100vh-64px)] overflow-hidden flex">
+<!-- Center Content: Case List -->
+<div class="flex-1 flex flex-col gap-loose h-full mr-4 overflow-y-auto pr-2">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-on-surface-variant">
+<span class="font-body-sm text-body-sm hover:text-primary cursor-pointer">Dashboard</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-body-sm text-body-sm text-primary font-bold">Case Management</span>
+</nav>
+<!-- Filter Bar -->
+<section class="bg-white border border-outline-variant rounded-lg p-standard shadow-sm">
+<div class="flex flex-wrap items-end gap-compact">
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Date Range</label>
+<select class="border-outline-variant rounded bg-surface-container-low text-body-sm py-1.5 px-3 focus:ring-primary pr-8">
+<option>Last 30 Days</option>
+<option>Last Quarter</option>
+<option>Year to Date</option>
+<option>Custom Range</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">District</label>
+<select class="border-outline-variant rounded bg-surface-container-low text-body-sm py-1.5 px-3 focus:ring-primary pr-8">
+<option>All Districts</option>
+<option>Bengaluru Central</option>
+<option>Mysuru City</option>
+<option>Hubballi-Dharwad</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Crime Type</label>
+<select class="border-outline-variant rounded bg-surface-container-low text-body-sm py-1.5 px-3 focus:ring-primary pr-8">
+<option>All Crimes</option>
+<option>Cybercrime</option>
+<option>Narcotics</option>
+<option>Public Order</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant block">Assigned Officer</label>
+<select class="border-outline-variant rounded bg-surface-container-low text-body-sm py-1.5 px-3 focus:ring-primary pr-8">
+<option>Show All</option>
+<option>Assigned to Me</option>
+<option>Unassigned</option>
+</select>
+</div>
+<button class="bg-secondary px-6 py-2 rounded text-on-secondary font-title-sm text-title-sm flex items-center gap-2 hover:brightness-110 transition-all ml-auto">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+                        Apply Filters
+                    </button>
+</div>
+</section>
+<!-- Data Table Container -->
+<section class="bg-white border border-outline-variant rounded-lg flex-1 flex flex-col overflow-hidden shadow-sm">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-low z-10 border-b border-outline-variant">
+<tr>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant">FIR Number</th>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant">Case Status</th>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant">Priority</th>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant">Assigned Officer</th>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant">Date Filed</th>
+<th class="px-standard py-3 font-label-caps text-label-caps text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest cursor-pointer transition-colors group" onclick="toggleDrawer(true)">
+<td class="px-standard py-2 font-mono-data text-mono-data text-primary font-bold">KSP-2023-00412</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-secondary-fixed text-on-secondary-fixed-variant">Under Investigation</span>
+</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-error/10 text-error">High Priority</span>
+</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Insp. Arjun Rao</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Oct 24, 2023</td>
+<td class="px-standard py-2 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest cursor-pointer transition-colors bg-surface-container-low/30" onclick="toggleDrawer(true)">
+<td class="px-standard py-2 font-mono-data text-mono-data text-primary font-bold">KSP-2023-00409</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-surface-dim text-on-surface-variant">Awaiting Evidence</span>
+</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-secondary-fixed text-on-secondary-fixed-variant">Medium</span>
+</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Sub-Insp. Priya M.</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Oct 22, 2023</td>
+<td class="px-standard py-2 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest cursor-pointer transition-colors" onclick="toggleDrawer(true)">
+<td class="px-standard py-2 font-mono-data text-mono-data text-primary font-bold">KSP-2023-00398</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">Case Closed</span>
+</td>
+<td class="px-standard py-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-surface-dim text-on-surface-variant">Low Priority</span>
+</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Insp. Kumar S.</td>
+<td class="px-standard py-2 font-body-sm text-body-sm">Oct 15, 2023</td>
+<td class="px-standard py-2 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- More placeholder rows for high density -->
+<script>
+                                for(let i=1; i<=12; i++) {
+                                    document.write(`
+                                    <tr class="hover:bg-surface-container-lowest cursor-pointer transition-colors ${i%2===0?'bg-surface-container-low/30':''}" onclick="toggleDrawer(true)">
+                                        <td class="px-standard py-2 font-mono-data text-mono-data text-primary font-bold">KSP-2023-00${400-i}</td>
+                                        <td class="px-standard py-2">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-secondary-fixed text-on-secondary-fixed-variant">Active</span>
+                                        </td>
+                                        <td class="px-standard py-2">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-surface-dim text-on-surface-variant">Normal</span>
+                                        </td>
+                                        <td class="px-standard py-2 font-body-sm text-body-sm">Unit Staff 0${i}</td>
+                                        <td class="px-standard py-2 font-body-sm text-body-sm">Oct 0${i}, 2023</td>
+                                        <td class="px-standard py-2 text-right">
+                                            <button class="p-1 rounded hover:bg-surface-container text-primary transition-colors">
+                                                <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    `);
+                                }
+                             </script>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-standard py-3 border-t border-outline-variant flex items-center justify-between bg-surface">
+<p class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 15 of 1,284 cases</p>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-bold text-[12px]">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-[12px]">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-[12px]">3</button>
+<span class="px-2 text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-[12px]">86</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Side: Quick Detail Drawer -->
+<div class="w-0 opacity-0 lg:flex flex-col bg-white border border-outline-variant rounded-lg transition-all duration-300 overflow-hidden shadow-xl" id="detailDrawer">
+<div class="w-[340px] h-full flex flex-col">
+<div class="p-standard border-b border-outline-variant flex items-center justify-between bg-surface-container-low">
+<h3 class="font-title-sm text-title-sm font-bold text-primary">Quick Case Insight</h3>
+<button class="p-1 hover:bg-surface-dim rounded-full transition-colors" onclick="toggleDrawer(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-standard space-y-loose">
+<!-- Case Overview -->
+<div class="space-y-compact">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant">FIR NUMBER</p>
+<p class="font-headline-md text-headline-md font-bold text-primary">KSP-2023-00412</p>
+</div>
+<span class="bg-error/10 text-error px-2 py-0.5 rounded text-[10px] font-bold uppercase">Critical</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Financial fraud investigation involving multi-city digital transactions exceeding ₹1.2 Cr. Suspicion of organized cyber-syndicate operation.</p>
+</div>
+<!-- AI Summary Section -->
+<div class="ai-insight-glow rounded-lg p-compact space-y-compact shadow-sm">
+<div class="flex items-center gap-2 text-tertiary-container">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-title-sm text-title-sm font-bold">AI Correlation Summary</span>
+</div>
+<div class="space-y-3">
+<div class="bg-white/50 rounded p-2">
+<p class="font-label-caps text-label-caps text-on-tertiary-fixed-variant">KEY DISCOVERY</p>
+<p class="font-body-sm text-body-sm">Detected IP pattern matching a 2021 closed case in Belagavi unit. 87% confidence of same perpetrator group.</p>
+</div>
+<div class="bg-white/50 rounded p-2">
+<p class="font-label-caps text-label-caps text-on-tertiary-fixed-variant">URGENT ACTION</p>
+<p class="font-body-sm text-body-sm">Financial logs indicate potential transaction exit within 48 hours. Recommend immediate bank freeze request.</p>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant/30 flex justify-between items-center">
+<p class="font-label-caps text-label-caps opacity-60">Source: Neural Cluster Alpha</p>
+<button class="text-secondary font-bold text-[11px] hover:underline">View Logic</button>
+</div>
+</div>
+<!-- Map/Location Quick View -->
+<div class="space-y-tight">
+<p class="font-label-caps text-label-caps text-on-surface-variant">INCIDENT LOCATION CLUSTER</p>
+<div class="h-32 rounded-lg bg-surface-container overflow-hidden border border-outline-variant relative">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist heat map visualization of a city grid in Bengaluru, showing crime hotspots in shades of blue and violet, high-end data visualization aesthetic, minimal labels, professional interface style." data-location="Bengaluru City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChs-v71zAsymUnxGHUY9rs6usNW0N51Ol42IukD5n9NfsUwpUV0sUhBWMQZPSc5HTgrL3JteUdAJ3EGlPeB5Y9yLbJcIqE-VGl6qPrzuHj0b-9itAAfOyGEQ8dSCYeVEZo3u8n-T9XTm5wFXB_vG3hfv8U6EXpQYxFM62p4OQshDutibtlRc-KbARsh5vX_XruJSg1ARZVeZE0d1AEDw0RtOIyNwII1iJqphhMAXFTqHAIlH88g0a5cjW8b9hHEFnn1mIYu2yClw"/>
+<div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+</div>
+</div>
+<!-- Officer Notes -->
+<div class="space-y-tight">
+<p class="font-label-caps text-label-caps text-on-surface-variant">RECENT ACTIVITY</p>
+<div class="space-y-3">
+<div class="flex gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5"></div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">Evidence Added</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant">10:45 AM • Insp. Arjun Rao</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-1.5 h-1.5 rounded-full bg-outline mt-1.5"></div>
+<div>
+<p class="font-body-sm text-body-sm font-bold">Status Updated to "Under Investigation"</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant">Yesterday • System Auto</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-standard border-t border-outline-variant space-y-compact">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded font-title-sm text-title-sm flex items-center justify-center gap-2 hover:brightness-110 shadow-sm transition-all">
+                        Open Full Case Folder
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="w-full border border-outline-variant text-on-surface py-2.5 rounded font-title-sm text-title-sm flex items-center justify-center gap-2 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                        Share Insight
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        function toggleDrawer(show) {
+            const drawer = document.getElementById('detailDrawer');
+            if (show) {
+                drawer.classList.remove('w-0', 'opacity-0');
+                drawer.classList.add('w-[340px]', 'opacity-100', 'ml-4');
+            } else {
+                drawer.classList.add('w-0', 'opacity-0');
+                drawer.classList.remove('w-[340px]', 'opacity-100', 'ml-4');
+            }
+        }
+
+        // Initialize with first row selected for visual demonstration
+        window.onload = () => {
+            // Uncomment to start with drawer open
+            // toggleDrawer(true);
+        }
+    </script>
+</body></html>

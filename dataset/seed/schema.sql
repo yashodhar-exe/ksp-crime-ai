@@ -97,6 +97,10 @@ CREATE TABLE users (
     station_id   VARCHAR(10)  REFERENCES police_stations (station_id),
     status       VARCHAR(20)  NOT NULL DEFAULT 'Active',
     last_login   DATE
+    -- hashed_password is NOT added here: schema.sql models the seeded demo
+    -- dataset, which has no credentials. It's added by
+    -- backend/alembic/versions/0001_add_users_hashed_password.py — run
+    -- `alembic upgrade head` after loading this schema. See backend/README.md.
 );
 
 CREATE INDEX idx_users_role ON users (role_id);
