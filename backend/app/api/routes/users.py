@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -9,13 +9,21 @@ from app.core.security import hash_password
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.audit import UserCreate, UserOut, UserUpdate
+from app.services.audit_service import log_action
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("", response_model=list[UserOut])
-def list_users(db: Session = Depends(get_db), _: User = Depends(require_role("can_manage_users"))) -> list[UserOut]:
-    return db.execute(select(User).order_by(User.username)).scalars().all()
+def list_users(
+    status_filter: str | None = Query(None, alias="status", description="Filter by exact status, e.g. 'Pending', 'Active'"),
+    db: Session = Depends(get_db),
+    _: User = Depends(require_role("can_manage_users")),
+) -> list[UserOut]:
+    stmt = select(User).order_by(User.username)
+    if status_filter:
+        stmt = stmt.where(User.status == status_filter)
+    return db.execute(stmt).scalars().all()
 
 
 @router.post("", response_model=UserOut, status_code=status.HTTP_201_CREATED)
@@ -64,4 +72,56 @@ def update_user(
 
     db.commit()
     db.refresh(user)
+    return user
+
+
+@router.post("/{user_id}/approve", response_model=UserOut)
+def approve_user(
+    user_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_role("can_manage_users")),
+) -> UserOut:
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if user.status != "Pending":
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Only pending accounts can be approved")
+
+    user.status = "Active"
+    db.commit()
+    db.refresh(user)
+
+    log_action(
+        db,
+        user_id=admin.user_id,
+        action=f"Approved User: {user.username}"[:50],
+        ip_address=request.client.host if request.client else "unknown",
+    )
+    return user
+
+
+@router.post("/{user_id}/reject", response_model=UserOut)
+def reject_user(
+    user_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_role("can_manage_users")),
+) -> UserOut:
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if user.status != "Pending":
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Only pending accounts can be rejected")
+
+    user.status = "Rejected"
+    db.commit()
+    db.refresh(user)
+
+    log_action(
+        db,
+        user_id=admin.user_id,
+        action=f"Rejected User: {user.username}"[:50],
+        ip_address=request.client.host if request.client else "unknown",
+    )
     return user

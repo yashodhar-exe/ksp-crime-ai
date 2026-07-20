@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Icon } from "@/components/ui/Icon";
 
@@ -105,6 +105,13 @@ export default function LoginPage() {
                 </>
               )}
             </button>
+
+            <p className="text-center text-sm text-on-surface-variant">
+              New officer?{" "}
+              <Link to="/register" className="text-primary font-semibold hover:underline">
+                Register for access
+              </Link>
+            </p>
           </form>
         </div>
 

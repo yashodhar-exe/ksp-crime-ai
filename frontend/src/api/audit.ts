@@ -6,8 +6,16 @@ export async function listAuditLogs(params: { user_id?: string; case_id?: string
   return res.data;
 }
 
-export async function listUsers() {
-  const res = await client.get<User[]>("/users");
+export async function listUsers(params: { status?: string } = {}) {
+  const res = await client.get<User[]>("/users", { params });
+  return res.data;
+}
+export async function approveUser(userId: string) {
+  const res = await client.post<User>(`/users/${userId}/approve`);
+  return res.data;
+}
+export async function rejectUser(userId: string) {
+  const res = await client.post<User>(`/users/${userId}/reject`);
   return res.data;
 }
 export async function createUser(payload: {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useAsync } from "@/hooks/useAsync";
-import { listUsers, createUser, updateUser } from "@/api/audit";
+import { listUsers, createUser, updateUser, approveUser, rejectUser } from "@/api/audit";
 import { LoadingState, ErrorState } from "@/components/ui/States";
 import { Icon } from "@/components/ui/Icon";
 import { getRole, ROLES } from "@/types/roles";
@@ -29,10 +29,36 @@ export default function UsersPage() {
     }
   }
 
+  const [actioningId, setActioningId] = useState<string | null>(null);
+
   async function toggleStatus(userId: string, current: string) {
     await updateUser(userId, { status: current === "Active" ? "Inactive" : "Active" });
     reload();
   }
+
+  async function handleApprove(userId: string) {
+    setActioningId(userId);
+    try {
+      await approveUser(userId);
+      reload();
+    } finally {
+      setActioningId(null);
+    }
+  }
+
+  async function handleReject(userId: string) {
+    if (!window.confirm("Reject this registration? The account will not be able to log in.")) return;
+    setActioningId(userId);
+    try {
+      await rejectUser(userId);
+      reload();
+    } finally {
+      setActioningId(null);
+    }
+  }
+
+  const pendingUsers = data?.filter((u) => u.status === "Pending") ?? [];
+  const otherUsers = data?.filter((u) => u.status !== "Pending") ?? [];
 
   return (
     <AppLayout title="User Management">
@@ -85,6 +111,50 @@ export default function UsersPage() {
         </form>
       )}
 
+      {!loading && !error && pendingUsers.length > 0 && (
+        <div className="card overflow-hidden mb-4 border-amber-300/60">
+          <div className="px-4 py-3 border-b border-outline-variant/50 flex items-center gap-2 bg-amber-50">
+            <Icon name="pending_actions" className="text-amber-700 text-lg" />
+            <h2 className="text-sm font-semibold text-amber-900">
+              Pending Approvals ({pendingUsers.length})
+            </h2>
+          </div>
+          <table className="data-table w-full text-sm">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Username</th>
+                <th className="px-4 py-2">Requested Role</th>
+                <th className="px-4 py-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {pendingUsers.map((u) => (
+                <tr key={u.user_id} className="border-t border-outline-variant/50">
+                  <td className="px-4 py-2">{u.username}</td>
+                  <td className="px-4 py-2">{getRole(u.role_id)?.role_name ?? u.role_id}</td>
+                  <td className="px-4 py-2 text-right space-x-3">
+                    <button
+                      disabled={actioningId === u.user_id}
+                      onClick={() => handleApprove(u.user_id)}
+                      className="text-green-700 text-xs font-semibold hover:underline disabled:opacity-50"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      disabled={actioningId === u.user_id}
+                      onClick={() => handleReject(u.user_id)}
+                      className="text-error text-xs font-semibold hover:underline disabled:opacity-50"
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       <div className="card overflow-hidden">
         {loading ? (
           <LoadingState />
@@ -103,13 +173,21 @@ export default function UsersPage() {
               </tr>
             </thead>
             <tbody>
-              {data!.map((u) => (
+              {otherUsers.map((u) => (
                 <tr key={u.user_id} className="border-t border-outline-variant/50">
                   <td className="px-4 py-2">{u.username}</td>
                   <td className="px-4 py-2">{getRole(u.role_id)?.role_name ?? u.role_id}</td>
                   <td className="px-4 py-2 font-mono text-xs">{u.station_id ?? "—"}</td>
                   <td className="px-4 py-2">
-                    <span className={`badge-pill ${u.status === "Active" ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-600"}`}>
+                    <span
+                      className={`badge-pill ${
+                        u.status === "Active"
+                          ? "bg-green-50 text-green-700"
+                          : u.status === "Rejected"
+                          ? "bg-red-50 text-red-700"
+                          : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
                       {u.status}
                     </span>
                   </td>

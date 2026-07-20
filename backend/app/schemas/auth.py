@@ -18,6 +18,19 @@ class RefreshRequest(BaseModel):
     refresh_token: str
 
 
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    role_id: str
+
+
+class RegisterResponse(BaseModel):
+    user_id: str
+    username: str
+    status: str
+    message: str
+
+
 class CurrentUserOut(ORMModel):
     user_id: str
     username: str

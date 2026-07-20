@@ -15,6 +15,11 @@ export async function logout() {
   }
 }
 
+export async function register(username: string, password: string, roleId: string) {
+  const res = await client.post("/auth/register", { username, password, role_id: roleId });
+  return res.data as { user_id: string; username: string; status: string; message: string };
+}
+
 // The backend has no GET /auth/me — CurrentUser is decoded client-side
 // from the JWT payload instead (see context/AuthContext.tsx).
 export type { CurrentUser };
