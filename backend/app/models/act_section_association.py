@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 from sqlalchemy import ForeignKey, ForeignKeyConstraint, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -15,8 +16,8 @@ class ActSectionAssociation(Base):
     case_master_id: Mapped[int] = mapped_column(Integer, ForeignKey("case_master.case_master_id"), nullable=False)
     act_id: Mapped[str] = mapped_column(String(20), ForeignKey("act.act_code"), nullable=False)
     section_id: Mapped[str] = mapped_column(String(20), nullable=False)
-    act_order_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    section_order_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    act_order_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    section_order_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     __table_args__ = (
         ForeignKeyConstraint(["act_id", "section_id"], ["section.act_code", "section.section_code"]),

@@ -1,3 +1,4 @@
+from typing import Optional
 from app.schemas.common import ORMModel
 
 
@@ -7,7 +8,7 @@ class OfficerOut(ORMModel):
     rank: str
     station_id: str
     phone: str
-    email: str | None
+    email: Optional[str]
 
 
 class StationOut(ORMModel):

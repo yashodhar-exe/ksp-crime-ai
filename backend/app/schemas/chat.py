@@ -1,10 +1,11 @@
+from typing import Optional
 from datetime import datetime
 
 from pydantic import BaseModel
 
 
 class ChatQueryRequest(BaseModel):
-    session_id: str | None = None
+    session_id: Optional[str] = None
     question: str
 
 

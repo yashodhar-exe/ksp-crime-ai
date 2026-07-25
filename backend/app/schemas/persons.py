@@ -1,14 +1,15 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
 class PersonCaseLinkOut(BaseModel):
     case_master_id: int
     crime_no: str
-    crime_sub_head_name: str | None
-    case_status_name: str | None
+    crime_sub_head_name: Optional[str]
+    case_status_name: Optional[str]
     role: str  # "Accused" | "Victim" | "Complainant"
     person_name: str
-    age_year: int | None = None
+    age_year: Optional[int] = None
 
 
 class PersonSearchResponse(BaseModel):

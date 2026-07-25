@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, Query
@@ -15,10 +16,10 @@ router = APIRouter(prefix="/audit-logs", tags=["audit"])
 
 @router.get("", response_model=list[AuditLogOut])
 def list_audit_logs(
-    user_id: str | None = None,
-    case_id: str | None = None,
-    date_from: datetime | None = None,
-    date_to: datetime | None = None,
+    user_id: Optional[str] = None,
+    case_id: Optional[str] = None,
+    date_from: Optional[datetime] = None,
+    date_to: Optional[datetime] = None,
     limit: int = Query(default=100, le=500),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),

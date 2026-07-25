@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import date
 
 from sqlalchemy import select
@@ -10,12 +11,12 @@ from app.models.lookups import CrimeHead, CaseStatusMaster, Unit, District
 def list_cases(
     db: Session,
     *,
-    crime_type: str | None = None,
-    status: str | None = None,
-    district: str | None = None,
-    date_from: date | None = None,
-    date_to: date | None = None,
-    scoped_district: str | None = None,
+    crime_type: Optional[str] = None,
+    status: Optional[str] = None,
+    district: Optional[str] = None,
+    date_from: Optional[date] = None,
+    date_to: Optional[date] = None,
+    scoped_district: Optional[str] = None,
     limit: int = 50,
     offset: int = 0,
 ) -> tuple[list[CaseMaster], int]:
@@ -58,7 +59,7 @@ def list_cases(
     return list(items), total
 
 
-def get_case(db: Session, case_master_id: int) -> CaseMaster | None:
+def get_case(db: Session, case_master_id: int) -> Optional[CaseMaster]:
     return db.query(CaseMaster).options(
         joinedload(CaseMaster.police_station).joinedload(Unit.district),
         joinedload(CaseMaster.case_status),

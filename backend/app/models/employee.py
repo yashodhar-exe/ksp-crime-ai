@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 from datetime import date
 
@@ -14,19 +15,19 @@ class Employee(Base):
     __tablename__ = "employee"
 
     employee_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    district_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
-    unit_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("unit.unit_id"), nullable=True)
-    rank_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("rank_master.rank_id"), nullable=True)
-    designation_id: Mapped[int | None] = mapped_column(
+    district_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
+    unit_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("unit.unit_id"), nullable=True)
+    rank_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("rank_master.rank_id"), nullable=True)
+    designation_id: Mapped[Optional[int]] = mapped_column(
         Integer, ForeignKey("designation.designation_id"), nullable=True
     )
     kgid: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     first_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    employee_dob: Mapped[date | None] = mapped_column(Date, nullable=True)
-    gender_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    blood_group_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    employee_dob: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    gender_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    blood_group_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     physically_challenged: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    appointment_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    appointment_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
     district: Mapped["District"] = relationship(back_populates="employees")  # noqa: F821
     unit: Mapped["Unit"] = relationship(back_populates="employees")  # noqa: F821

@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.orm import Session
 
@@ -16,7 +17,7 @@ router = APIRouter(prefix="/search", tags=["search"])
 def search_entity(
     request: Request,
     value: str = Query(..., min_length=2),
-    entity_type: str | None = Query(default=None, description="Citizen | Phone | Vehicle | Bank | Officer | Case"),
+    entity_type: Optional[str] = Query(default=None, description="Citizen | Phone | Vehicle | Bank | Officer | Case"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> SearchResponse:

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 from datetime import date, datetime
 
@@ -25,26 +26,26 @@ class CaseMaster(Base):
     police_person_id: Mapped[int] = mapped_column(Integer, ForeignKey("employee.employee_id"), nullable=False)
     police_station_id: Mapped[int] = mapped_column(Integer, ForeignKey("unit.unit_id"), nullable=False)
     case_category_id: Mapped[int] = mapped_column(Integer, ForeignKey("case_category.case_category_id"), nullable=False)
-    gravity_offence_id: Mapped[int | None] = mapped_column(
+    gravity_offence_id: Mapped[Optional[int]] = mapped_column(
         Integer, ForeignKey("gravity_offence.gravity_offence_id"), nullable=True
     )
-    crime_major_head_id: Mapped[int | None] = mapped_column(
+    crime_major_head_id: Mapped[Optional[int]] = mapped_column(
         Integer, ForeignKey("crime_head.crime_head_id"), nullable=True
     )
-    crime_minor_head_id: Mapped[int | None] = mapped_column(
+    crime_minor_head_id: Mapped[Optional[int]] = mapped_column(
         Integer, ForeignKey("crime_sub_head.crime_sub_head_id"), nullable=True
     )
     case_status_id: Mapped[int] = mapped_column(Integer, ForeignKey("case_status_master.case_status_id"), nullable=False)
-    court_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("court.court_id"), nullable=True)
+    court_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("court.court_id"), nullable=True)
 
-    incident_from_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-    incident_to_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-    info_received_ps_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    incident_from_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    incident_to_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    info_received_ps_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
-    latitude: Mapped[float | None] = mapped_column(Numeric(9, 6), nullable=True)
-    longitude: Mapped[float | None] = mapped_column(Numeric(9, 6), nullable=True)
+    latitude: Mapped[Optional[float]] = mapped_column(Numeric(9, 6), nullable=True)
+    longitude: Mapped[Optional[float]] = mapped_column(Numeric(9, 6), nullable=True)
 
-    brief_facts: Mapped[str | None] = mapped_column(Text, nullable=True)
+    brief_facts: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # --- relationships ---
     registering_officer: Mapped["Employee"] = relationship(  # noqa: F821
@@ -56,7 +57,7 @@ class CaseMaster(Base):
     crime_major_head: Mapped["CrimeHead"] = relationship(back_populates="cases")  # noqa: F821
     crime_minor_head: Mapped["CrimeSubHead"] = relationship(back_populates="cases")  # noqa: F821
     case_status: Mapped["CaseStatusMaster"] = relationship(back_populates="cases")  # noqa: F821
-    court: Mapped["Court | None"] = relationship(back_populates="cases")  # noqa: F821
+    court: Mapped["Optional[Court]"] = relationship(back_populates="cases")  # noqa: F821
 
     complainants: Mapped[list["ComplainantDetails"]] = relationship(  # noqa: F821
         back_populates="case", cascade="all, delete-orphan"
@@ -74,39 +75,39 @@ class CaseMaster(Base):
     )
 
     @property
-    def case_category_name(self) -> str | None:
+    def case_category_name(self) -> Optional[str]:
         return self.case_category.category_name if self.case_category else None
 
     @property
-    def case_status_name(self) -> str | None:
+    def case_status_name(self) -> Optional[str]:
         return self.case_status.case_status_name if self.case_status else None
 
     @property
-    def gravity_name(self) -> str | None:
+    def gravity_name(self) -> Optional[str]:
         return self.gravity_offence.lookup_value if self.gravity_offence else None
 
     @property
-    def crime_head_name(self) -> str | None:
+    def crime_head_name(self) -> Optional[str]:
         return self.crime_major_head.head_name if self.crime_major_head else None
 
     @property
-    def crime_sub_head_name(self) -> str | None:
+    def crime_sub_head_name(self) -> Optional[str]:
         return self.crime_minor_head.crime_head_name if self.crime_minor_head else None
 
     @property
-    def police_station_name(self) -> str | None:
+    def police_station_name(self) -> Optional[str]:
         return self.police_station.unit_name if self.police_station else None
 
     @property
-    def district_name(self) -> str | None:
+    def district_name(self) -> Optional[str]:
         if self.police_station and self.police_station.district:
             return self.police_station.district.district_name
         return None
 
     @property
-    def registering_officer_name(self) -> str | None:
+    def registering_officer_name(self) -> Optional[str]:
         return self.registering_officer.person_name if self.registering_officer else None
 
     @property
-    def court_name(self) -> str | None:
+    def court_name(self) -> Optional[str]:
         return self.court.court_name if self.court else None

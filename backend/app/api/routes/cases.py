@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
@@ -26,11 +27,11 @@ def _client_ip(request: Request) -> str:
 
 @router.get("", response_model=CaseListOut)
 def list_cases(
-    crime_type: str | None = None,
-    status_: str | None = Query(default=None, alias="status"),
-    district: str | None = None,
-    date_from: date | None = None,
-    date_to: date | None = None,
+    crime_type: Optional[str] = None,
+    status_: Optional[str] = Query(default=None, alias="status"),
+    district: Optional[str] = None,
+    date_from: Optional[date] = None,
+    date_to: Optional[date] = None,
     limit: int = Query(default=50, le=200),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),

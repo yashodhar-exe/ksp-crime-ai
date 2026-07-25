@@ -1,3 +1,4 @@
+from typing import Optional
 """
 The PDF ER diagram has no central "citizen" master — Accused, Victim, and
 ComplainantDetails are each scoped to a single case. This router provides
@@ -22,7 +23,7 @@ from app.schemas.persons import CoAccusedOut, PersonCaseLinkOut, PersonSearchRes
 router = APIRouter(prefix="/persons", tags=["persons"])
 
 
-def _case_display(db: Session, case: CaseMaster) -> tuple[str | None, str | None]:
+def _case_display(db: Session, case: CaseMaster) -> tuple[Optional[str], Optional[str]]:
     sub_head = db.get(CrimeSubHead, case.crime_minor_head_id) if case.crime_minor_head_id else None
     status_row = db.get(CaseStatusMaster, case.case_status_id)
     return (

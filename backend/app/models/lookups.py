@@ -1,8 +1,9 @@
+from __future__ import annotations
+from typing import Optional
 """
 Master / lookup tables from the KSP Police FIR ER Diagram.
 These are the low-churn reference tables that everything else hangs off of.
 """
-from __future__ import annotations
 
 from sqlalchemy import Boolean, ForeignKey, ForeignKeyConstraint, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -15,7 +16,7 @@ class State(Base):
 
     state_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     state_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    nationality_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    nationality_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     districts: Mapped[list["District"]] = relationship(back_populates="state")
@@ -42,8 +43,8 @@ class UnitType(Base):
 
     unit_type_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     unit_type_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    city_dist_state: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    hierarchy: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    city_dist_state: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    hierarchy: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     units: Mapped[list["Unit"]] = relationship(back_populates="unit_type")
@@ -56,15 +57,15 @@ class Unit(Base):
 
     unit_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     unit_name: Mapped[str] = mapped_column(String(150), nullable=False)
-    type_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("unit_type.unit_type_id"), nullable=True)
-    parent_unit: Mapped[int | None] = mapped_column(Integer, ForeignKey("unit.unit_id"), nullable=True)
-    nationality_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    state_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("state.state_id"), nullable=True)
-    district_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
+    type_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("unit_type.unit_type_id"), nullable=True)
+    parent_unit: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("unit.unit_id"), nullable=True)
+    nationality_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    state_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("state.state_id"), nullable=True)
+    district_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     unit_type: Mapped["UnitType"] = relationship(back_populates="units")
-    parent: Mapped["Unit | None"] = relationship(remote_side="Unit.unit_id", back_populates="children")
+    parent: Mapped["Optional[Unit]"] = relationship(remote_side="Unit.unit_id", back_populates="children")
     children: Mapped[list["Unit"]] = relationship(back_populates="parent")
     state: Mapped["State"] = relationship(back_populates="units")
     district: Mapped["District"] = relationship(back_populates="units")
@@ -78,7 +79,7 @@ class Rank(Base):
 
     rank_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     rank_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    hierarchy: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    hierarchy: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     employees: Mapped[list["Employee"]] = relationship(back_populates="rank")  # noqa: F821
@@ -90,7 +91,7 @@ class Designation(Base):
     designation_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     designation_name: Mapped[str] = mapped_column(String(100), nullable=False)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    sort_order: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sort_order: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     employees: Mapped[list["Employee"]] = relationship(back_populates="designation")  # noqa: F821
 
@@ -131,7 +132,7 @@ class CrimeSubHead(Base):
     crime_sub_head_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     crime_head_id: Mapped[int] = mapped_column(Integer, ForeignKey("crime_head.crime_head_id"), nullable=False)
     crime_head_name: Mapped[str] = mapped_column(String(150), nullable=False)  # sub-head display name
-    seq_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    seq_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     crime_head: Mapped["CrimeHead"] = relationship(back_populates="sub_heads")
     cases: Mapped[list["CaseMaster"]] = relationship(back_populates="crime_minor_head")  # noqa: F821
@@ -142,7 +143,7 @@ class Act(Base):
 
     act_code: Mapped[str] = mapped_column(String(20), primary_key=True)
     act_description: Mapped[str] = mapped_column(String(255), nullable=False)
-    short_name: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    short_name: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     sections: Mapped[list["Section"]] = relationship(back_populates="act")
@@ -155,7 +156,7 @@ class Section(Base):
 
     act_code: Mapped[str] = mapped_column(String(20), ForeignKey("act.act_code"), primary_key=True)
     section_code: Mapped[str] = mapped_column(String(20), primary_key=True)
-    section_description: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    section_description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     act: Mapped["Act"] = relationship(back_populates="sections")
@@ -232,8 +233,8 @@ class Court(Base):
 
     court_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     court_name: Mapped[str] = mapped_column(String(150), nullable=False)
-    district_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
-    state_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("state.state_id"), nullable=True)
+    district_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("district.district_id"), nullable=True)
+    state_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("state.state_id"), nullable=True)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     district: Mapped["District"] = relationship(back_populates="courts")

@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 from app.schemas.audit import AuditLogOut
@@ -10,7 +11,7 @@ class DashboardSummaryOut(BaseModel):
     critical_cases: int
     total_citizens: int
     total_officers: int
-    district: str | None  # None = viewing all districts (admin/SP)
+    district: Optional[str]  # None = viewing all districts (admin/SP)
 
 
 class BreakdownPoint(BaseModel):

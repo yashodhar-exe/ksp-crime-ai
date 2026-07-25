@@ -1,3 +1,4 @@
+from typing import Optional
 """
 Thin wrapper around the boolean permission columns on `roles`
 (can_view_all_districts, can_export, can_edit_case, can_manage_users).
@@ -21,7 +22,7 @@ def has_permission(role: Role, permission: str) -> bool:
     return bool(getattr(role, permission, False))
 
 
-def scoped_district(role: Role, user_district: str | None) -> str | None:
+def scoped_district(role: Role, user_district: Optional[str]) -> Optional[str]:
     """
     Returns the district a user's queries should be filtered to, or None
     if they can see all districts (e.g. Admin / SP roles). Callers apply

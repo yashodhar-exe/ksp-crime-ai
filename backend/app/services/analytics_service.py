@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -5,7 +6,7 @@ from app.models.case_master import CaseMaster
 from app.models.lookups import CrimeHead, District, Unit
 
 
-def crime_trends(db: Session, *, district: str | None, period: str) -> list[tuple[str, str, int]]:
+def crime_trends(db: Session, *, district: Optional[str], period: str) -> list[tuple[str, str, int]]:
     """
     period is 'month' or 'year' — grouped via Postgres date_trunc. Returns
     (period_label, crime_type, count) tuples; the route layer formats them
@@ -42,7 +43,7 @@ def district_hotspots(db: Session, *, limit: int = 20) -> list[tuple[str, int]]:
     return [(row.district_name, row.count) for row in db.execute(stmt)]
 
 
-def top_crime_type_for_district(db: Session, district: str) -> str | None:
+def top_crime_type_for_district(db: Session, district: str) -> Optional[str]:
     stmt = (
         select(CrimeHead.crime_group_name, func.count().label("count"))
         .select_from(CaseMaster)

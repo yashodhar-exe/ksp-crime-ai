@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
@@ -12,7 +13,7 @@ router = APIRouter(prefix="/analytics", tags=["analytics"])
 
 @router.get("/crime-trends", response_model=CrimeTrendsOut)
 def crime_trends(
-    district: str | None = None,
+    district: Optional[str] = None,
     period: str = Query(default="month", pattern="^(month|year)$"),
     db: Session = Depends(get_db),
     _: User = Depends(get_current_user),

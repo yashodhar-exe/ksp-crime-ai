@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import date, datetime
 
 from sqlalchemy import Date, DateTime, ForeignKey, String
@@ -10,17 +11,17 @@ class User(Base):
     __tablename__ = "users"
 
     user_id: Mapped[str] = mapped_column(String(10), primary_key=True)
-    officer_id: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    officer_id: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     username: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     role_id: Mapped[str] = mapped_column(String(10), ForeignKey("roles.role_id"), nullable=False)
-    station_id: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    station_id: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="Active")
-    last_login: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_login: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
     # Not part of schema.sql (auth needs a credential store) — see note in
     # core/security.py. Added here rather than a separate table to keep the
     # login flow a single query; nullable so existing seeded rows still load.
-    hashed_password: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    hashed_password: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     role: Mapped["Role"] = relationship(back_populates="users")  # noqa: F821
     audit_logs: Mapped[list["AuditLog"]] = relationship(back_populates="user")  # noqa: F821

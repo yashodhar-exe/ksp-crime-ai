@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
@@ -17,7 +18,7 @@ from app.services import dashboard_service
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
-def _caller_district(current_user: User) -> str | None:
+def _caller_district(current_user: User) -> Optional[str]:
     # TODO: Fetch district from station_id if needed, but for now fallback to None
     user_district = None
     return scoped_district(current_user.role, user_district)

@@ -1,3 +1,4 @@
+from typing import Optional
 from app.schemas.common import ORMModel
 
 
@@ -8,8 +9,8 @@ class CitizenOut(ORMModel):
     gender: str
     age: int
     phone: str
-    email: str | None
-    address: str | None
+    email: Optional[str]
+    address: Optional[str]
     city: str
     district: str
 
@@ -32,20 +33,20 @@ class RelationshipOut(ORMModel):
 class PhoneOut(ORMModel):
     phone_id: str
     phone_number: str
-    provider: str | None
+    provider: Optional[str]
 
 
 class VehicleOut(ORMModel):
     vehicle_id: str
     vehicle_number: str
-    vehicle_type: str | None
+    vehicle_type: Optional[str]
 
 
 class BankAccountOut(ORMModel):
     account_id: str
     bank_name: str
     account_number: str
-    ifsc: str | None
+    ifsc: Optional[str]
 
 
 class CitizenAssetsOut(ORMModel):

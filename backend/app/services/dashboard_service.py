@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import date
 
 from sqlalchemy import func, select
@@ -11,7 +12,7 @@ from app.models.accused import Accused
 from app.models.lookups import CaseStatusMaster, CrimeHead, Unit, District
 
 
-def summary(db: Session, *, scoped_district: str | None) -> dict:
+def summary(db: Session, *, scoped_district: Optional[str]) -> dict:
     """
     Card-level counts for a dashboard home screen.
     """
@@ -51,7 +52,7 @@ def summary(db: Session, *, scoped_district: str | None) -> dict:
     }
 
 
-def status_breakdown(db: Session, *, scoped_district: str | None) -> list[tuple[str, int]]:
+def status_breakdown(db: Session, *, scoped_district: Optional[str]) -> list[tuple[str, int]]:
     stmt = (
         select(CaseStatusMaster.case_status_name, func.count(CaseMaster.case_master_id).label("count"))
         .join(CaseMaster, CaseStatusMaster.case_status_id == CaseMaster.case_status_id)
@@ -62,7 +63,7 @@ def status_breakdown(db: Session, *, scoped_district: str | None) -> list[tuple[
     return [(row.case_status_name, row.count) for row in db.execute(stmt)]
 
 
-def crime_type_breakdown(db: Session, *, scoped_district: str | None, limit: int = 8) -> list[tuple[str, int]]:
+def crime_type_breakdown(db: Session, *, scoped_district: Optional[str], limit: int = 8) -> list[tuple[str, int]]:
     stmt = (
         select(CrimeHead.crime_group_name, func.count(CaseMaster.case_master_id).label("count"))
         .join(CaseMaster, CrimeHead.crime_head_id == CaseMaster.crime_major_head_id)
@@ -75,7 +76,7 @@ def crime_type_breakdown(db: Session, *, scoped_district: str | None, limit: int
     return [(row.crime_group_name, row.count) for row in db.execute(stmt)]
 
 
-def recent_cases(db: Session, *, scoped_district: str | None, limit: int = 10) -> list[CaseMaster]:
+def recent_cases(db: Session, *, scoped_district: Optional[str], limit: int = 10) -> list[CaseMaster]:
     stmt = (
         select(CaseMaster)
         .options(
@@ -92,7 +93,7 @@ def recent_cases(db: Session, *, scoped_district: str | None, limit: int = 10) -
     return list(db.execute(stmt).scalars().all())
 
 
-def recent_activity(db: Session, *, user_id: str | None, limit: int = 20) -> list[AuditLog]:
+def recent_activity(db: Session, *, user_id: Optional[str], limit: int = 20) -> list[AuditLog]:
     stmt = select(AuditLog).order_by(AuditLog.timestamp.desc()).limit(limit)
     if user_id:
         stmt = stmt.where(AuditLog.user_id == user_id)

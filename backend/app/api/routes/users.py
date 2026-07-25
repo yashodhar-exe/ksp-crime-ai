@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
@@ -16,7 +17,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("", response_model=list[UserOut])
 def list_users(
-    status_filter: str | None = Query(None, alias="status", description="Filter by exact status, e.g. 'Pending', 'Active'"),
+    status_filter: Optional[str] = Query(None, alias="status", description="Filter by exact status, e.g. 'Pending', 'Active'"),
     db: Session = Depends(get_db),
     _: User = Depends(require_role("can_manage_users")),
 ) -> list[UserOut]:

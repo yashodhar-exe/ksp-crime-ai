@@ -1,5 +1,5 @@
 {
-	"command": "sh -c \"uvicorn app.main:app --host 0.0.0.0 --port ${X_ZOHO_CATALYST_LISTEN_PORT:-8000}\"",
+	"command": "sh -c \"python3 -m uvicorn app.main:app --host 0.0.0.0 --port ${X_ZOHO_CATALYST_LISTEN_PORT:-8000}\"",
 	"build_path": "./",
 	"stack": "python_3_9",
 	"env_variables": {
@@ -11,11 +11,7 @@
 		"REFRESH_TOKEN_EXPIRE_MINUTES": "10080",
 		"OPENAI_OR_LLM_API_KEY": "",
 		"VECTOR_DB_URL": "",
-		"CORS_ORIGINS": "[\"https://ksp-crime-ai-frontend-50043881632.development.catalystappsail.in\"]"
+		"CORS_ORIGINS": "[\"http://localhost:5173\",\"http://localhost:3000\",\"https://ksp-crime-ai-2026.onslate.in\"]"
 	},
-	"memory": 256,
-	"scripts": {
-		"preserve": "python -m pip install -r ./requirements.txt -t ./ --upgrade",
-		"predeploy": "python -m pip install -r ./requirements.txt -t ./ --upgrade"
-	}
+	"memory": 256
 }

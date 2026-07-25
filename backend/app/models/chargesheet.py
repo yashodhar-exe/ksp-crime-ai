@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 from datetime import datetime
 
@@ -15,9 +16,9 @@ class ChargesheetDetails(Base):
 
     csid: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     case_master_id: Mapped[int] = mapped_column(Integer, ForeignKey("case_master.case_master_id"), nullable=False)
-    csdate: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    csdate: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     cstype: Mapped[str] = mapped_column(CHAR(1), nullable=False)  # A / B / C
-    police_person_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("employee.employee_id"), nullable=True)
+    police_person_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("employee.employee_id"), nullable=True)
 
     case: Mapped["CaseMaster"] = relationship(back_populates="chargesheets")  # noqa: F821
     police_person: Mapped["Employee"] = relationship(back_populates="chargesheets")  # noqa: F821

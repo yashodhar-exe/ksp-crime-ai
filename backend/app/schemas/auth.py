@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 from app.schemas.common import ORMModel
@@ -35,6 +36,6 @@ class CurrentUserOut(ORMModel):
     user_id: str
     username: str
     role_id: str
-    officer_id: str | None
-    station_id: str | None
+    officer_id: Optional[str]
+    station_id: Optional[str]
     status: str

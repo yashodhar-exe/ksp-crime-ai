@@ -1,3 +1,4 @@
+from typing import Optional
 import uuid
 from datetime import datetime, timezone
 
@@ -21,7 +22,7 @@ def log_action(
     user_id: str,
     action: str,
     ip_address: str,
-    case_id: str | None = None,
+    case_id: Optional[str] = None,
     commit: bool = True,
 ) -> AuditLog:
     """
