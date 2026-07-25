@@ -64,7 +64,7 @@ export default function DashboardPage() {
                   <BarChart data={stats.data!.by_status}>
                     <XAxis dataKey="label" fontSize={12} />
                     <YAxis fontSize={12} allowDecimals={false} />
-                    <Tooltip />
+                    <Tooltip cursor={false} />
                     <Bar dataKey="count" fill="#0b1f5e" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -89,7 +89,7 @@ export default function DashboardPage() {
                         <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip cursor={false} />
                   </PieChart>
                 </ResponsiveContainer>
               )}

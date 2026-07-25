@@ -58,6 +58,11 @@ def top_crime_type_for_district(db: Session, district: str) -> str | None:
     return row.crime_group_name if row else None
 
 
-def pattern_summaries(db: Session) -> list[tuple[str, int]]:
-    # Predictive patterns removed during migration
-    return []
+def crime_heads_summary(db: Session) -> list[tuple[int, str, int]]:
+    stmt = (
+        select(CrimeHead.crime_head_id, CrimeHead.crime_group_name, func.count(CaseMaster.case_master_id).label("count"))
+        .outerjoin(CaseMaster, CrimeHead.crime_head_id == CaseMaster.crime_major_head_id)
+        .group_by(CrimeHead.crime_head_id, CrimeHead.crime_group_name)
+        .order_by(func.count(CaseMaster.case_master_id).desc())
+    )
+    return [(row.crime_head_id, row.crime_group_name, row.count) for row in db.execute(stmt)]

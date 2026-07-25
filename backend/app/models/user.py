@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import date, datetime
 
-from sqlalchemy import Date, ForeignKey, String
+from sqlalchemy import Date, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -15,7 +15,7 @@ class User(Base):
     role_id: Mapped[str] = mapped_column(String(10), ForeignKey("roles.role_id"), nullable=False)
     station_id: Mapped[str | None] = mapped_column(String(10), nullable=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="Active")
-    last_login: Mapped[date | None] = mapped_column(Date, nullable=True)
+    last_login: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     # Not part of schema.sql (auth needs a credential store) — see note in
     # core/security.py. Added here rather than a separate table to keep the

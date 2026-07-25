@@ -2,7 +2,7 @@ import { client } from "./client";
 
 export interface CrimeTrendPoint {
   period: string;
-  crime_sub_head_name: string;
+  crime_group_name: string;
   count: number;
 }
 export interface CrimeTrendsOut {
@@ -13,7 +13,7 @@ export interface CrimeTrendsOut {
 export interface HotspotOut {
   district_name: string;
   case_count: number;
-  top_crime_sub_head_name: string | null;
+  top_crime_group_name: string | null;
 }
 export interface CrimeHeadOut {
   crime_head_id: number;

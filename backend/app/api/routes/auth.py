@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
@@ -50,6 +51,9 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
 
     access_token = create_access_token(user.user_id, user.username, user.role_id, user.station_id)
     refresh_token = create_refresh_token(user.user_id)
+
+    user.last_login = datetime.now()
+    db.commit()
 
     log_action(
         db,

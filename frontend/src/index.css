@@ -138,4 +138,7 @@
   table.data-table tbody tr:nth-child(even) {
     background-color: var(--color-zebra);
   }
+  table.data-table tbody td {
+    @apply align-middle;
+  }
 }

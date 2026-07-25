@@ -82,6 +82,7 @@ def recent_cases(db: Session, *, scoped_district: str | None, limit: int = 10) -
             joinedload(CaseMaster.police_station).joinedload(Unit.district),
             joinedload(CaseMaster.case_status),
             joinedload(CaseMaster.crime_major_head),
+            joinedload(CaseMaster.gravity_offence),
         )
         .order_by(CaseMaster.crime_registered_date.desc())
         .limit(limit)

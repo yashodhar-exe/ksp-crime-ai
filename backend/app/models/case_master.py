@@ -79,11 +79,11 @@ class CaseMaster(Base):
 
     @property
     def case_status_name(self) -> str | None:
-        return self.case_status.status_name if self.case_status else None
+        return self.case_status.case_status_name if self.case_status else None
 
     @property
     def gravity_name(self) -> str | None:
-        return self.gravity_offence.gravity_name if self.gravity_offence else None
+        return self.gravity_offence.lookup_value if self.gravity_offence else None
 
     @property
     def crime_head_name(self) -> str | None:
@@ -91,7 +91,7 @@ class CaseMaster(Base):
 
     @property
     def crime_sub_head_name(self) -> str | None:
-        return self.crime_minor_head.sub_head_name if self.crime_minor_head else None
+        return self.crime_minor_head.crime_head_name if self.crime_minor_head else None
 
     @property
     def police_station_name(self) -> str | None:

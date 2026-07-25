@@ -62,7 +62,7 @@ class ArrestSurrenderOut(ORMModel):
 class ChargesheetOut(ORMModel):
     csid: int
     case_master_id: int
-    csdate: date | None = None
+    csdate: datetime | None = None
     cstype: str
     police_person_id: int | None = None
 

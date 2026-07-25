@@ -14,14 +14,15 @@ router = APIRouter(prefix="/stations", tags=["stations"])
 
 @router.get("")
 def list_stations(db: Session = Depends(get_db), _: User = Depends(get_current_user)):
-    stmt = select(Unit).options(joinedload(Unit.district)).order_by(Unit.unit_name)
+    stmt = select(Unit).options(joinedload(Unit.district), joinedload(Unit.unit_type)).order_by(Unit.unit_name)
     units = db.execute(stmt).scalars().all()
     return [
         {
-            "station_id": str(u.unit_id),
-            "station_name": u.unit_name,
-            "district": u.district.district_name if u.district else "Unknown",
-            "contact_number": u.mobile_no or ""
+            "unit_id": u.unit_id,
+            "unit_name": u.unit_name,
+            "unit_type_name": u.unit_type.unit_type_name if u.unit_type else "Unknown",
+            "district_name": u.district.district_name if u.district else None,
+            "active": u.active,
         }
         for u in units
     ]

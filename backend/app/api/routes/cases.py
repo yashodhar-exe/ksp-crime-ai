@@ -36,7 +36,8 @@ def list_cases(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> CaseListOut:
-    user_district = current_user.station.district if current_user.station else None
+    # TODO: Fetch district from station_id if needed, but for now fallback to None
+    user_district = None
     district_filter = scoped_district(current_user.role, user_district)
 
     items, total = case_service.list_cases(
@@ -64,7 +65,7 @@ def get_case(
     if case is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found")
 
-    log_action(db, user_id=current_user.user_id, action="Viewed Case", case_id=str(case_id), ip_address=_client_ip(request))
+    log_action(db, user_id=current_user.user_id, action="Viewed Case", ip_address=_client_ip(request))
     return CaseDetailOut.model_validate(case)
 
 

@@ -22,7 +22,7 @@ export function Topbar({ title }: { title: string }) {
       <h1 className="text-lg font-bold text-on-surface">{title}</h1>
 
       <div className="flex items-center gap-4">
-        <form onSubmit={handleSearchSubmit} className="relative hidden md:block">
+        <form onSubmit={handleSearchSubmit} className="relative hidden md:block mr-4">
           <Icon
             name="search"
             className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg"
@@ -30,8 +30,8 @@ export function Topbar({ title }: { title: string }) {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search phone, FIR, citizen..."
-            className="pl-10 pr-3 py-2 w-72 rounded-md border border-outline-variant text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+            placeholder="Search phone, FIR, citizen"
+            className="pl-10 pr-3 py-2 w-96 rounded-md border border-outline-variant text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
           />
         </form>
 
@@ -39,15 +39,18 @@ export function Topbar({ title }: { title: string }) {
           <Icon name="notifications" />
         </button>
 
-        <div className="flex items-center gap-2 pl-4 border-l border-outline-variant">
+        <button
+          onClick={() => navigate("/settings")}
+          className="flex items-center gap-2 pl-4 border-l border-outline-variant cursor-pointer"
+        >
           <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold uppercase">
             {user?.username?.slice(0, 2) ?? "??"}
           </div>
-          <div className="leading-tight hidden sm:block">
+          <div className="leading-tight hidden sm:block text-left">
             <p className="text-xs font-semibold text-on-surface">{user?.username}</p>
             <p className="text-[11px] text-on-surface-variant">{role?.role_name ?? "Unknown role"}</p>
           </div>
-        </div>
+        </button>
       </div>
     </header>
   );

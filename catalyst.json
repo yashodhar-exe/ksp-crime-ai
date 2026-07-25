@@ -1,7 +1,7 @@
 {
   "appsail": [
     {
-      "source": "appsail-python",
+      "source": "backend",
       "name": "ksp-crime-ai-backend"
     }
   ]

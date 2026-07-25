@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.analytics import CrimeTrendPoint, CrimeTrendsOut, HotspotOut, PatternSummaryOut
+from app.schemas.analytics import CrimeTrendPoint, CrimeTrendsOut, HotspotOut, CrimeHeadOut
 from app.services import analytics_service
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
@@ -18,7 +18,7 @@ def crime_trends(
     _: User = Depends(get_current_user),
 ) -> CrimeTrendsOut:
     rows = analytics_service.crime_trends(db, district=district, period=period)
-    points = [CrimeTrendPoint(period=p, crime_type=ct, count=c) for p, ct, c in rows]
+    points = [CrimeTrendPoint(period=p, crime_group_name=ct, count=c) for p, ct, c in rows]
     return CrimeTrendsOut(district=district, period=period, points=points)
 
 
@@ -32,24 +32,22 @@ def hotspots(
     rows = analytics_service.district_hotspots(db, limit=limit)
     return [
         HotspotOut(
-            district=district,
+            district_name=district,
             case_count=count,
-            top_crime_type=analytics_service.top_crime_type_for_district(db, district),
+            top_crime_group_name=analytics_service.top_crime_type_for_district(db, district),
         )
         for district, count in rows
     ]
 
 
-@router.get("/patterns", response_model=list[PatternSummaryOut])
-def patterns(db: Session = Depends(get_db), _: User = Depends(get_current_user)) -> list[PatternSummaryOut]:
-    rows = analytics_service.pattern_summaries(db)
+@router.get("/crime-heads", response_model=list[CrimeHeadOut])
+def crime_heads(db: Session = Depends(get_db), _: User = Depends(get_current_user)) -> list[CrimeHeadOut]:
+    rows = analytics_service.crime_heads_summary(db)
     return [
-        PatternSummaryOut(
-            pattern_id=pattern.pattern_id,
-            crime_type=pattern.crime_type,
-            modus_operandi=pattern.modus_operandi,
-            risk_level=pattern.risk_level,
-            case_count=count,
+        CrimeHeadOut(
+            crime_head_id=r[0],
+            crime_group_name=r[1],
+            case_count=r[2],
         )
-        for pattern, count in rows
+        for r in rows
     ]

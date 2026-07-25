@@ -6,7 +6,7 @@ import { getRole } from "@/types/roles";
 const NAV_ITEMS: { to: string; label: string; icon: string }[] = [
   { to: "/dashboard", label: "Dashboard", icon: "dashboard" },
   { to: "/cases", label: "Cases", icon: "folder_shared" },
-  { to: "/search", label: "Search Intelligence", icon: "search" },
+  { to: "/search", label: "Search", icon: "search" },
   { to: "/citizens", label: "Citizens", icon: "person_search" },
   { to: "/network", label: "Criminal Network", icon: "hub" },
   { to: "/officers", label: "Officers", icon: "local_police" },

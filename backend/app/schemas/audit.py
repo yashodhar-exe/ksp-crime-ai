@@ -21,7 +21,7 @@ class UserOut(ORMModel):
     role_id: str
     station_id: str | None
     status: str
-    last_login: date | None
+    last_login: datetime | None
 
 
 class UserCreate(BaseModel):

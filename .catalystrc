@@ -10,17 +10,17 @@
   "projects": [
     {
       "idx": 1,
-      "id": "55890000000016001",
-      "name": "KSP-Crime-AI",
+      "id": "56499000000019001",
+      "name": "ksp-crime-ai",
       "domain": {
-        "id": "50043881632",
-        "name": "ksp-crime-ai-60077747063.development"
+        "id": "50044345940",
+        "name": "ksp-crime-ai-60079167473.development"
       },
       "timezone": "Asia/Kolkata",
       "env": [
         {
           "idx": 1,
-          "id": "60077747063",
+          "id": "60079167473",
           "name": "Development",
           "type": 3
         }

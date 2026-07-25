@@ -33,7 +33,7 @@ export default function SearchPage() {
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Phone number, vehicle number, account number, FIR, citizen ID..."
+            placeholder="Phone number, vehicle number, account number, FIR, citizen ID"
             className="w-full pl-10 pr-3 py-2.5 border border-outline-variant rounded-md text-sm"
           />
         </div>

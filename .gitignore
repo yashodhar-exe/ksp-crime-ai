@@ -1,5 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Regenerable AI artifacts (rebuild via ai/rag/build_index.py and ai/risk_model/train.py)
-ai/rag/vector_store/*.index
-ai/rag/vector_store/*.joblib
-ai/risk_model/model/*.joblib
+# Virtual environments
+venv/
+.venv/
+env/
+pip-log.txt
+
+# Node / Frontend
+node_modules/
+frontend/dist/
+dist/
+dist-ssr/
+*.local
+.npm
+npm-debug.log*
+
+# Env files
+.env
+.env.development
+.env.local
+.env.*.local
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# MacOS
+.DS_Store
+
+# Logs
+logs
+*.log
+import.log
+
+# Zoho Catalyst
+.catalystrc

@@ -15,7 +15,7 @@ export default function AnalyticsPage() {
   // Reshape trend points (period, crime_sub_head_name, count) into recharts-friendly rows per period.
   const chartData = (() => {
     if (!trends.data) return [];
-    const allCrimeTypes = Array.from(new Set(trends.data.points.map((p) => p.crime_sub_head_name)));
+    const allCrimeTypes = Array.from(new Set(trends.data.points.map((p) => p.crime_group_name)));
     const byPeriod = new Map<string, Record<string, number | string>>();
 
     // First, initialize every period with 0 for every crime type to prevent broken lines
@@ -32,7 +32,7 @@ export default function AnalyticsPage() {
     // Then fill in the actual counts
     for (const p of trends.data.points) {
       const row = byPeriod.get(p.period)!;
-      row[p.crime_sub_head_name] = p.count;
+      row[p.crime_group_name] = p.count;
     }
 
     // Sort chronologically to prevent line zigzags
@@ -40,7 +40,7 @@ export default function AnalyticsPage() {
       String(a.period).localeCompare(String(b.period))
     );
   })();
-  const crimeTypesInChart = Array.from(new Set(trends.data?.points.map((p) => p.crime_sub_head_name) ?? [])).slice(0, 5);
+  const crimeTypesInChart = Array.from(new Set(trends.data?.points.map((p) => p.crime_group_name) ?? [])).slice(0, 5);
   const COLORS = ["#0b1f5e", "#1d4ed8", "#8b5cf6", "#dc2626", "#059669"];
 
   return (
@@ -82,7 +82,7 @@ export default function AnalyticsPage() {
               {hotspots.data!.slice(0, 12).map((h) => (
                 <li key={h.district_name} className="flex justify-between">
                   <span>{h.district_name}</span>
-                  <span className="text-xs text-on-surface-variant">{h.case_count} cases {h.top_crime_sub_head_name ? `· ${h.top_crime_sub_head_name}` : ""}</span>
+                  <span className="text-xs text-on-surface-variant">{h.case_count} cases {h.top_crime_group_name ? `· ${h.top_crime_group_name}` : ""}</span>
                 </li>
               ))}
             </ul>

@@ -15,7 +15,7 @@
 	},
 	"memory": 256,
 	"scripts": {
-		"preserve": "python3 -m pip install -r ./requirements.txt -t ./ --upgrade",
-		"predeploy": "python3 -m pip install -r ./requirements.txt -t ./ --upgrade"
+		"preserve": "python -m pip install -r ./requirements.txt -t ./ --upgrade",
+		"predeploy": "python -m pip install -r ./requirements.txt -t ./ --upgrade"
 	}
 }

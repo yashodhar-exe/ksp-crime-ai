@@ -1,5 +1,0 @@
-role_id,role_name,description
-1,Admin,Full system access
-2,SHO,Station House Officer — manages FIRs for a station
-3,Investigating Officer,Investigates assigned cases
-4,Analyst,Read-only analytics & reporting access

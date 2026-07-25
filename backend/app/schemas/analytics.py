@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class CrimeTrendPoint(BaseModel):
     period: str
-    crime_type: str
+    crime_group_name: str
     count: int
 
 
@@ -14,14 +14,12 @@ class CrimeTrendsOut(BaseModel):
 
 
 class HotspotOut(BaseModel):
-    district: str
+    district_name: str
     case_count: int
-    top_crime_type: str | None = None
+    top_crime_group_name: str | None = None
 
 
-class PatternSummaryOut(BaseModel):
-    pattern_id: str
-    crime_type: str
-    modus_operandi: str | None
-    risk_level: str
+class CrimeHeadOut(BaseModel):
+    crime_head_id: int
+    crime_group_name: str
     case_count: int

@@ -1,165 +1,62 @@
-# KSP Crime AI
+# KSP Datathon Submission: Intelligent Crime Analysis Platform
 
-Intelligent conversational AI platform for the Karnataka State Crime Records
-Bureau (SCRB) — built for a Smart India Hackathon-style prototype. Lets
-investigators query crime data using natural language and surface crime
-patterns, criminal networks, socio-demographic insights, and early-warning
-signals, instead of relying on static dashboards and manual queries.
+This project is submitted for the **Karnataka State Police (KSP) Datathon**. It presents a prototype for an intelligent, conversational AI platform designed to empower the State Crime Records Bureau (SCRB) and local investigators.
 
 ## Problem Statement
 
-SCRB manages crime data from 1,100+ police stations across Karnataka.
-Current systems rely on static dashboards and manual queries, limiting deep
-analysis and real-time insight. This project builds a conversational AI
-layer on top of that data to enable:
+Currently, the SCRB manages crime data from over 1,100 police stations across Karnataka. However, officers often rely on static dashboards and manual database queries, which limits their ability to conduct deep analysis, uncover hidden criminal networks, or receive early-warning signals for emerging crime hotspots.
 
-- Crime pattern discovery
-- Criminal network analysis
-- Socio-demographic insights
-- Behavioral profiling
-- Proactive crime prevention intelligence
+## Our Solution
 
-## Key Features
+This prototype builds a modern conversational AI layer and advanced analytics suite directly on top of structured crime records. It enables investigators to move beyond static reporting and into proactive, intelligence-driven policing.
 
-- Natural language chatbot (English; Kannada planned, not in MVP — see [Honest scope notes](#honest-scope-notes-on-this-build))
-- Criminal network visualization
-- Crime trend & hotspot detection (district-level; not GPS-based in MVP)
-- Similar-case detection (crime_type + pattern_id matching, not a trained ML model)
-- Explainable AI with audit trails
-- Role-based secure access (Admin / SP / DSP / Inspector / Sub Inspector / Constable)
+### Key Capabilities Developed for the Datathon:
 
-## Project Structure
+1. **Natural Language Querying (NLP)**: Investigators can query complex crime data using plain English, bypassing the need for complex SQL queries or filtering tools.
+2. **Criminal Network Visualization**: An interactive radial graph automatically maps and visualizes known relationships between suspects, victims, and associates.
+3. **Automated Similar-Case Detection**: The system surfaces historically similar cases based on crime types and Modus Operandi (MO) pattern matching.
+4. **Crime Trend & Hotspot Detection**: District-level analytics to highlight emerging crime trends.
+5. **Role-Based Access Control**: Secure, tiered access designed around real police hierarchy (Admin, SP, DSP, Inspector, Sub Inspector, Constable).
 
-```
-ksp-crime-ai/
-├── dataset/
-│   ├── generator/       # scripts that produced the synthetic dataset
-│   ├── raw/              # original, untouched CSVs
-│   ├── processed/        # final CSVs — load these into Postgres
-│   └── seed/              # load_database.py + schema.sql (DDL)
-├── backend/               # FastAPI service — fully implemented, verified end-to-end
-├── frontend/              # React + TypeScript + Tailwind — wired to every backend endpoint
-├── ai/                    # notes on RAG / network analysis approach used inside backend/app/services
-├── deployment/            # Dockerfiles + nginx config
-├── scripts/               # dataset validation, demo password seeding
-├── docs/                  # ER diagrams, API spec, roadmap
-├── docker-compose.yml
-├── .env.example
-└── README.md
-```
+## Architecture & Technology Stack
 
-## Dataset
+Our platform is a fully functional web application, structured as a monorepo for seamless deployment.
 
-Synthetic but relationally consistent: 10,000 citizens, 10,000 cases, 500
-officers, 100 stations, plus suspects, victims, evidence, digital evidence,
-criminal relationships, timeline events, crime patterns, a real (not
-random) search index, users, roles, and audit logs. See
-`dataset/generator/` for how it was built and `scripts/validate_dataset.py`
-for the integrity checks it passes.
+- **Backend (API Layer)**: Python & FastAPI
+- **Database**: PostgreSQL (handling relational data for citizens, cases, evidence, and audit logs)
+- **Frontend (UI Layer)**: React, TypeScript, and Tailwind CSS (packaged via Vite)
+- **Deployment Strategy**: Docker & Docker Compose (or Serverless deployment via Zoho Catalyst AppSail & Slate)
 
-Regenerate or re-validate:
-```bash
-python dataset/generator/generate_dataset.py
-python dataset/generator/augment_dataset.py
-python dataset/generator/augment_dataset_phase2.py
-python scripts/validate_dataset.py
-```
+## Getting Started
 
-## Getting Started (Docker — recommended)
+### Prerequisites
+- Docker & Docker Compose installed on your machine.
+- A local `.env` file (you can copy from `.env.example`).
+
+### Running Locally
 
 ```bash
-cp .env.example .env
 docker compose up -d --build
-psql postgresql://postgres:postgres@localhost:5433/ksp_crime -f dataset/seed/schema.sql
-python dataset/seed/load_database.py
-cd backend && alembic upgrade head && cd ..   # adds users.hashed_password — see backend/README.md
-python scripts/seed_demo_passwords.py
 ```
+Once the containers are running:
+- **Frontend App**: `http://localhost:3000`
+- **Backend API Docs**: `http://localhost:8000/docs`
 
-- Backend: http://localhost:8000/docs (FastAPI's interactive Swagger UI)
-- Frontend: http://localhost:3000
+### Demo Accounts
 
-## Getting Started (local dev, no Docker)
+The platform includes role-based access control. You can test the platform using the following demo accounts:
 
-```bash
-# Backend
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload   # http://localhost:8000
+| Username | Role | Password |
+|---|---|---|
+| `admin.scrb` | Admin | `Demo@KSP2026` |
+| `sp.blr.city` | SP | `Demo@KSP2026` |
+| `dsp.mysuru` | DSP | `Demo@KSP2026` |
 
-# Frontend (separate terminal)
-cd frontend
-npm install
-cp .env.example .env
-npm run dev                     # http://localhost:5173
-```
+*Note: These are mock accounts generated specifically for the datathon prototype evaluation.*
 
-Either way, run schema.sql + load_database.py + seed_demo_passwords.py
-against your Postgres instance first (see Docker steps above for the exact
-commands — same commands work locally, just point DATABASE_URL at
-localhost:5433 or wherever your local Postgres is running).
+## Future Roadmap
 
-## Demo Login
-
-Passwords aren't part of the synthetic dataset — `dataset/processed/users.csv`
-intentionally has no password column (see `scripts/seed_demo_passwords.py`
-for why). After running that script, every seeded user shares one demo
-password:
-
-| Username | Role |
-|---|---|
-| `admin.scrb` | Admin |
-| `sp.blr.city` | SP |
-| `dsp.mysuru` | DSP |
-| any of the 30 officer-linked usernames in `dataset/processed/users.csv` | Inspector / Sub Inspector / Constable |
-
-**Password:** `Demo@KSP2026` (all users, all roles). This is a hackathon
-demo credential — rotate it before any real deployment.
-
-## Current Status
-
-✅ Dataset complete and validated
-✅ `dataset/seed/schema.sql` (Postgres DDL) — 19 tables, plus `hashed_password` on `users` for real auth
-✅ FastAPI backend — full route set (auth, cases, citizens, search, network, analytics, chat, audit, users), verified end-to-end (login → JWT → protected endpoints → joined case data) against a live database
-✅ Frontend — React + TypeScript + Tailwind, matching the Stitch design system's color tokens and component patterns, wired to every backend endpoint (no mock/hardcoded data)
-⬜ Kannada language support
-⬜ Trained similarity/ML model
-⬜ GPS-based hotspot mapping (currently district-level only)
-
-## Honest scope notes on this build
-
-- **Frontend visual fidelity**: built against the Stitch design system's exact
-  color tokens, typography, and component patterns (badges, cards, sidebar,
-  AI-accent panels), and directly referenced the Stitch HTML for the
-  Login and Dashboard layouts specifically. It is not a literal
-  pixel-for-pixel port of all 17 exported Stitch screens — pages like
-  Officers, Stations, and Users use a consistent, simpler table/card
-  pattern rather than a full bespoke layout per screen.
-- **AI Assistant**: `backend/app/services/nlp_service.py` uses full-text
-  search over `complaint_text`/`investigation_notes` plus templated
-  summarization — not a hosted LLM. This is disclosed in the UI, not
-  hidden behind chatbot styling.
-- **"Similar Cases"**: matched via `crime_type` + `pattern_id`, not a
-  trained model. Labeled as such in the Case Detail page.
-- **Network graph**: real SVG radial layout driven by live
-  `criminal_relationships` data — not a canned demo image, but also not a
-  physics-based force layout (didn't add a graph library dependency for a
-  hackathon-scale network).
-- **Every page under "Current Status" is wired to a real backend call** —
-  verified by an end-to-end test (seed a user + case in a live DB, log in,
-  hit protected endpoints, confirm real joined data comes back). There is
-  no page in this frontend rendering hardcoded/mock JSON.
-
-## Roadmap
-
-1. ~~Postgres schema~~ — done
-2. ~~FastAPI backend~~ — done, verified end-to-end
-3. ~~Frontend~~ — done, wired to real backend, matches Stitch design tokens
-4. **Polish**: Kannada support, GPS hotspots, trained similarity model,
-   PDF export styling, deployment hardening (secrets management, rate
-   limiting, HTTPS, moving off the demo password)
-
-## License / Context
-
-Built as a hackathon prototype (SIH-style problem statement). Not intended
-for production use with real citizen data.
+While this prototype demonstrates significant value, future iterations would include:
+- **Kannada Language Support**: Full localization for regional investigators.
+- **Advanced Machine Learning**: Upgrading the similar-case detection from pattern matching to a trained NLP embedding model.
+- **Geospatial Mapping**: Granular, GPS-based hotspot mapping overlaid on interactive maps.

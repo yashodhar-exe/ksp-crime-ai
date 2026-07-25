@@ -73,7 +73,6 @@ export default function CaseDetailPage() {
         <div className="space-y-6">
           <div className="ai-panel p-4">
             <div className="flex items-center gap-2 mb-3">
-              <Icon name="auto_awesome" className="text-ai-accent" />
               <h3 className="text-sm font-semibold text-on-surface">Similar Cases</h3>
             </div>
             {similar.loading ? <LoadingState /> : similar.error ? (

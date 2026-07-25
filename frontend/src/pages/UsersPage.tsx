@@ -122,8 +122,8 @@ export default function UsersPage() {
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th className="px-4 py-2">Username</th>
-                <th className="px-4 py-2">Requested Role</th>
+                <th className="px-4 py-2 text-left">Username</th>
+                <th className="px-4 py-2 text-left">Requested Role</th>
                 <th className="px-4 py-2"></th>
               </tr>
             </thead>
@@ -164,12 +164,12 @@ export default function UsersPage() {
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th className="px-4 py-2">Username</th>
-                <th className="px-4 py-2">Role</th>
-                <th className="px-4 py-2">Station</th>
-                <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Last Login</th>
-                <th className="px-4 py-2"></th>
+                <th className="px-4 py-2 text-left w-1/5">Username</th>
+                <th className="px-4 py-2 text-left w-1/6">Role</th>
+                <th className="px-4 py-2 text-center w-1/6">Station</th>
+                <th className="px-4 py-2 text-center w-1/6">Status</th>
+                <th className="px-4 py-2 text-center w-1/6">Last Login</th>
+                <th className="px-4 py-2 text-center w-1/6"></th>
               </tr>
             </thead>
             <tbody>
@@ -177,22 +177,24 @@ export default function UsersPage() {
                 <tr key={u.user_id} className="border-t border-outline-variant/50">
                   <td className="px-4 py-2">{u.username}</td>
                   <td className="px-4 py-2">{getRole(u.role_id)?.role_name ?? u.role_id}</td>
-                  <td className="px-4 py-2 font-mono text-xs">{u.station_id ?? "—"}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 font-mono text-xs text-center">{u.station_id ?? "—"}</td>
+                  <td className="px-4 py-2 text-center">
                     <span
-                      className={`badge-pill ${
+                      className={`font-semibold ${
                         u.status === "Active"
-                          ? "bg-green-50 text-green-700"
+                          ? "text-green-600"
                           : u.status === "Rejected"
-                          ? "bg-red-50 text-red-700"
-                          : "bg-slate-100 text-slate-600"
+                          ? "text-red-600"
+                          : "text-slate-500"
                       }`}
                     >
                       {u.status}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-xs">{u.last_login ?? "—"}</td>
-                  <td className="px-4 py-2 text-right">
+                  <td className="px-4 py-2 text-xs text-center">
+                    {u.last_login ? new Date(u.last_login).toLocaleString() : "—"}
+                  </td>
+                  <td className="px-4 py-2 text-center">
                     <button
                       onClick={() => toggleStatus(u.user_id, u.status)}
                       className="text-secondary text-xs font-semibold hover:underline"
