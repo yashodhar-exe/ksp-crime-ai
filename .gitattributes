@@ -1,0 +1,6 @@
+# Force LF line endings for env files regardless of the OS/editor used to
+# create or edit them. Prevents CRLF from sneaking into env-file values,
+# which breaks parsers that don't strip trailing \r (e.g. Docker's
+# --env-file loader, causing things like SQLAlchemy URL parse failures).
+*.env text eol=lf
+.env* text eol=lf

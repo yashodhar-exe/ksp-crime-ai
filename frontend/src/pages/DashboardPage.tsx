@@ -43,7 +43,7 @@ export default function DashboardPage() {
             <StatCard label="Total Cases" value={summary.data!.total_cases} icon="folder_shared" />
             <StatCard label="Open Cases" value={summary.data!.open_cases} icon="lock_open" />
             <StatCard label="Critical Cases" value={summary.data!.critical_cases} icon="priority_high" />
-            <StatCard label="Citizens on File" value={summary.data!.total_citizens} icon="groups" />
+            <StatCard label="Citizens" value={summary.data!.total_citizens} icon="groups" />
             <StatCard label="Officers" value={summary.data!.total_officers} icon="local_police" />
           </div>
           {summary.data!.district && (
@@ -79,13 +79,13 @@ export default function DashboardPage() {
                 <ResponsiveContainer width="100%" height={240}>
                   <PieChart>
                     <Pie
-                      data={stats.data!.by_crime_type.slice(0, 6)}
+                      data={stats.data!.by_crime_type?.slice(0, 6) || []}
                       dataKey="count"
                       nameKey="label"
                       innerRadius={45}
                       outerRadius={80}
                     >
-                      {stats.data!.by_crime_type.slice(0, 6).map((_, i) => (
+                      {(stats.data!.by_crime_type?.slice(0, 6) || []).map((_: any, i: number) => (
                         <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                       ))}
                     </Pie>
@@ -110,19 +110,19 @@ export default function DashboardPage() {
                 <ErrorState message={recent.error} onRetry={recent.reload} />
               ) : (
                 <div className="divide-y divide-outline-variant">
-                  {recent.data!.cases.map((c) => (
+                  {(recent.data!.cases || []).map((c) => (
                     <Link
-                      key={c.case_id}
-                      to={`/cases/${c.case_id}`}
+                      key={c.case_master_id}
+                      to={`/cases/${c.case_master_id}`}
                       className="flex items-center justify-between py-3 hover:bg-surface-container-low -mx-2 px-2 rounded"
                     >
                       <div>
-                        <p className="text-sm font-mono font-semibold text-on-surface">{c.fir_number}</p>
-                        <p className="text-xs text-on-surface-variant">{c.crime_type} · {c.district}</p>
+                        <p className="text-sm font-mono font-semibold text-on-surface">{c.crime_no}</p>
+                        <p className="text-xs text-on-surface-variant">{c.crime_head_name} · {c.district_name}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <PriorityBadge value={c.priority} />
-                        <StatusBadge value={c.status} />
+                        <PriorityBadge value={c.gravity_name ?? "Unknown"} />
+                        <StatusBadge value={c.case_status_name ?? "Unknown"} />
                       </div>
                     </Link>
                   ))}
@@ -132,7 +132,6 @@ export default function DashboardPage() {
 
             <div className="ai-panel p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Icon name="auto_awesome" className="text-ai-accent animate-pulse" />
                 <h2 className="text-sm font-semibold text-on-surface">Recent Activity</h2>
               </div>
               {activity.loading ? (
@@ -141,7 +140,7 @@ export default function DashboardPage() {
                 <ErrorState message={activity.error} onRetry={activity.reload} />
               ) : (
                 <ul className="space-y-3">
-                  {activity.data!.entries.slice(0, 8).map((entry) => (
+                  {(activity.data!.entries || []).slice(0, 8).map((entry) => (
                     <li key={entry.log_id} className="text-xs">
                       <p className="text-on-surface font-medium">{entry.action}</p>
                       <p className="text-on-surface-variant">

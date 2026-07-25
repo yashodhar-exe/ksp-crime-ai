@@ -1,0 +1,31 @@
+crime_sub_head_id,crime_head_id,crime_head_name,seq_id
+1,1,Murder,1
+2,1,Attempt to Murder,2
+3,1,Grievous Hurt,3
+4,1,Culpable Homicide,4
+5,2,Theft,1
+6,2,Burglary,2
+7,2,Robbery,3
+8,2,Dacoity,4
+9,2,Criminal Trespass,5
+10,3,Dowry Harassment,1
+11,3,Sexual Assault,2
+12,3,Kidnapping of Women,3
+13,3,Domestic Violence,4
+14,4,Online Financial Fraud,1
+15,4,Social Media Abuse,2
+16,4,Hacking,3
+17,4,Identity Theft,4
+18,5,Possession of Narcotics,1
+19,5,Drug Trafficking,2
+20,5,Illicit Liquor,3
+21,6,Unlawful Assembly,1
+22,6,Rioting,2
+23,6,Communal Disturbance,3
+24,7,Cheating,1
+25,7,Criminal Breach of Trust,2
+26,7,Forgery,3
+27,7,Counterfeiting,4
+28,8,Motor Vehicles Act Violation,1
+29,8,Arms Act Violation,2
+30,8,Excise Act Violation,3

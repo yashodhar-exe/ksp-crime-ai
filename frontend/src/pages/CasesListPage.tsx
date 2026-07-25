@@ -70,15 +70,15 @@ export default function CasesListPage() {
               </thead>
               <tbody>
                 {data?.items.map((c) => (
-                  <tr key={c.case_id} className="border-t border-outline-variant/50">
-                    <td className="px-4 py-2 font-mono text-xs">{c.fir_number}</td>
-                    <td className="px-4 py-2">{c.crime_type}</td>
-                    <td className="px-4 py-2">{c.district}</td>
-                    <td className="px-4 py-2">{c.incident_date}</td>
-                    <td className="px-4 py-2"><PriorityBadge value={c.priority} /></td>
-                    <td className="px-4 py-2"><StatusBadge value={c.status} /></td>
+                  <tr key={c.case_master_id} className="border-t border-outline-variant/50">
+                    <td className="px-4 py-2 font-mono text-xs">{c.crime_no}</td>
+                    <td className="px-4 py-2">{c.crime_head_name}</td>
+                    <td className="px-4 py-2">{c.district_name}</td>
+                    <td className="px-4 py-2">{c.incident_from_date}</td>
+                    <td className="px-4 py-2"><PriorityBadge value={c.gravity_name ?? "Unknown"} /></td>
+                    <td className="px-4 py-2"><StatusBadge value={c.case_status_name ?? "Unknown"} /></td>
                     <td className="px-4 py-2 text-right">
-                      <Link to={`/cases/${c.case_id}`} className="text-secondary font-semibold hover:underline">
+                      <Link to={`/cases/${c.case_master_id}`} className="text-secondary font-semibold hover:underline">
                         View <Icon name="chevron_right" className="text-sm align-middle" />
                       </Link>
                     </td>

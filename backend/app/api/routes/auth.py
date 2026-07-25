@@ -48,7 +48,7 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
     if user.status != "Active":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is not active")
 
-    access_token = create_access_token(user.user_id, user.role_id, user.station_id)
+    access_token = create_access_token(user.user_id, user.username, user.role_id, user.station_id)
     refresh_token = create_refresh_token(user.user_id)
 
     log_action(
@@ -128,7 +128,7 @@ def refresh(payload: RefreshRequest, db: Session = Depends(get_db)) -> TokenResp
     if user is None or user.status != "Active":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
 
-    access_token = create_access_token(user.user_id, user.role_id, user.station_id)
+    access_token = create_access_token(user.user_id, user.username, user.role_id, user.station_id)
     new_refresh_token = create_refresh_token(user.user_id)
     return TokenResponse(access_token=access_token, refresh_token=new_refresh_token)
 

@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getRole } from "@/types/roles";
 
 export function Topbar({ title }: { title: string }) {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const role = getRole(user?.role_id);
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -15,11 +15,6 @@ export function Topbar({ title }: { title: string }) {
     if (query.trim()) {
       navigate(`/search?q=${encodeURIComponent(query.trim())}`);
     }
-  }
-
-  async function handleLogout() {
-    await logout();
-    navigate("/login");
   }
 
   return (
@@ -45,20 +40,13 @@ export function Topbar({ title }: { title: string }) {
         </button>
 
         <div className="flex items-center gap-2 pl-4 border-l border-outline-variant">
-          <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
-            {user?.user_id?.slice(-2) ?? "??"}
+          <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold uppercase">
+            {user?.username?.slice(0, 2) ?? "??"}
           </div>
           <div className="leading-tight hidden sm:block">
-            <p className="text-xs font-semibold text-on-surface">{user?.user_id}</p>
+            <p className="text-xs font-semibold text-on-surface">{user?.username}</p>
             <p className="text-[11px] text-on-surface-variant">{role?.role_name ?? "Unknown role"}</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="ml-2 text-on-surface-variant hover:text-error transition-colors"
-            title="Logout"
-          >
-            <Icon name="logout" />
-          </button>
         </div>
       </div>
     </header>

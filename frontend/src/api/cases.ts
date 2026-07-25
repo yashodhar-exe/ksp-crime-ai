@@ -3,12 +3,6 @@ import type {
   Case,
   CaseDetail,
   CaseListResponse,
-  Suspect,
-  Victim,
-  Evidence,
-  DigitalEvidence,
-  InvestigationNote,
-  TimelineEvent,
   SimilarCase,
 } from "@/types/api";
 
@@ -40,30 +34,6 @@ export async function createCase(payload: Record<string, unknown>) {
   return res.data;
 }
 
-export async function getCaseSuspects(caseId: string) {
-  const res = await client.get<Suspect[]>(`/cases/${caseId}/suspects`);
-  return res.data;
-}
-export async function getCaseVictims(caseId: string) {
-  const res = await client.get<Victim[]>(`/cases/${caseId}/victims`);
-  return res.data;
-}
-export async function getCaseEvidence(caseId: string) {
-  const res = await client.get<Evidence[]>(`/cases/${caseId}/evidence`);
-  return res.data;
-}
-export async function getCaseDigitalEvidence(caseId: string) {
-  const res = await client.get<DigitalEvidence[]>(`/cases/${caseId}/digital-evidence`);
-  return res.data;
-}
-export async function getCaseNotes(caseId: string) {
-  const res = await client.get<InvestigationNote[]>(`/cases/${caseId}/notes`);
-  return res.data;
-}
-export async function getCaseTimeline(caseId: string) {
-  const res = await client.get<TimelineEvent[]>(`/cases/${caseId}/timeline`);
-  return res.data;
-}
 export async function getSimilarCases(caseId: string) {
   const res = await client.get<SimilarCase[]>(`/cases/${caseId}/similar-cases`);
   return res.data;

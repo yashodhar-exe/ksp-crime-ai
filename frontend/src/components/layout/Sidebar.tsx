@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/context/AuthContext";
 import { getRole } from "@/types/roles";
@@ -23,14 +23,13 @@ export function Sidebar() {
   const role = getRole(user?.role_id);
 
   return (
-    <aside className="w-[260px] h-full fixed left-0 top-0 bg-primary-container border-r border-outline-variant flex flex-col py-4 z-50">
-      <div className="px-6 pb-6 flex items-center gap-2">
-        <Icon name="shield" className="text-on-primary-container text-2xl" filled />
+    <aside className="w-[260px] h-full fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-4 z-50 shadow-sm">
+      <Link to="/dashboard" className="px-6 pb-6 flex items-center gap-3 cursor-pointer">
+        <img src="/src/assets/Karnataka Police.svg" alt="Karnataka Police" className="w-10 h-10 object-contain drop-shadow-sm" />
         <div className="leading-tight">
-          <p className="text-on-primary-container font-bold text-sm">KSP Crime AI</p>
-          <p className="text-on-primary-container/60 text-[11px] uppercase tracking-wide">SCRB Platform</p>
+          <p className="text-on-surface font-bold text-sm">KSP Crime AI</p>
         </div>
-      </div>
+      </Link>
 
       <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         {NAV_ITEMS.map((item) => (
@@ -38,10 +37,10 @@ export function Sidebar() {
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-sm transition-opacity ${
+              `flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                 isActive
-                  ? "text-on-secondary-container bg-on-primary-fixed-variant opacity-100"
-                  : "text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant"
+                  ? "text-primary bg-surface-container-high"
+                  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
               }`
             }
           >
@@ -56,10 +55,10 @@ export function Sidebar() {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-sm transition-opacity ${
+                `flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                   isActive
-                    ? "text-on-secondary-container bg-on-primary-fixed-variant opacity-100"
-                    : "text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant"
+                    ? "text-primary bg-surface-container-high"
+                    : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
                 }`
               }
             >
@@ -69,10 +68,10 @@ export function Sidebar() {
           ))}
       </nav>
 
-      <div className="px-3 pt-2 border-t border-on-primary-container/10 space-y-1">
+      <div className="px-3 pt-2 border-t border-outline-variant space-y-1">
         <NavLink
           to="/settings"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg text-on-primary-container opacity-60 hover:opacity-100 hover:bg-on-primary-fixed-variant text-sm font-semibold"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-sm font-semibold"
         >
           <Icon name="settings" />
           Settings

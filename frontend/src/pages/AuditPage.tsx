@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useAsync } from "@/hooks/useAsync";
 import { listAuditLogs } from "@/api/audit";
@@ -34,7 +35,15 @@ export default function AuditPage() {
                     <Icon name="history" className="text-sm text-on-surface-variant" />
                     {log.action}
                   </td>
-                  <td className="px-4 py-2 font-mono text-xs">{log.case_id ?? "—"}</td>
+                  <td className="px-4 py-2">
+                    {log.case_master_id ? (
+                      <Link to={`/cases/${log.case_master_id}`} className="text-primary-container font-mono text-xs hover:underline">
+                        Case #{log.case_master_id}
+                      </Link>
+                    ) : (
+                      <span className="font-mono text-xs text-on-surface-variant/50">—</span>
+                    )}
+                  </td>
                   <td className="px-4 py-2 font-mono text-xs">{log.ip_address}</td>
                 </tr>
               ))}

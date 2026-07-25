@@ -1,6 +1,4 @@
-// Mirrors backend/app/schemas/*.py — keep in sync manually since the two
-// codebases aren't in the same language for a shared codegen step.
-
+// Mirrors backend/app/schemas/*.py
 export interface Page {
   total: number;
   limit: number;
@@ -14,29 +12,109 @@ export interface CurrentUser {
   officer_id: string | null;
   station_id: string | null;
   status: string;
+  last_login: string | null;
 }
 
 export interface Case {
-  case_id: string;
-  fir_number: string;
-  crime_type: string;
-  station_id: string;
-  officer_id: string;
-  status: string;
-  priority: "High" | "Medium" | "Low" | "Critical" | string;
-  incident_date: string;
-  registered_date: string;
-  city: string;
-  district: string;
-  estimated_loss: number;
-  pattern_id: string | null;
+  case_master_id: number;
+  crime_no: string;
+  case_no: string;
+  crime_registered_date: string;
+  police_person_id: number;
+  police_station_id: number;
+  case_category_id: number;
+  gravity_offence_id: number | null;
+  crime_major_head_id: number | null;
+  crime_minor_head_id: number | null;
+  case_status_id: number;
+  court_id: number | null;
+  incident_from_date: string | null;
+  incident_to_date: string | null;
+  latitude: number | null;
+  longitude: number | null;
+
+  case_category_name: string | null;
+  case_status_name: string | null;
+  gravity_name: string | null;
+  crime_head_name: string | null;
+  crime_sub_head_name: string | null;
+  police_station_name: string | null;
+  district_name: string | null;
+}
+
+export interface Complainant {
+  complainant_id: number;
+  case_master_id: number;
+  complainant_name: string;
+  age_year: number | null;
+  occupation_id: number | null;
+  religion_id: number | null;
+  caste_id: number | null;
+  gender_id: number | null;
+}
+
+export interface ActSection {
+  id: number;
+  case_master_id: number;
+  act_id: string;
+  section_id: string;
+  act_order_id: number | null;
+  section_order_id: number | null;
+}
+
+export interface Victim {
+  victim_master_id: number;
+  case_master_id: number;
+  victim_name: string;
+  age_year: number | null;
+  gender_id: string | null;
+  victim_police: boolean;
+}
+
+export interface Accused {
+  accused_master_id: number;
+  case_master_id: number;
+  accused_name: string;
+  age_year: number | null;
+  gender_id: string | null;
+  person_id: string | null;
+}
+
+export interface ArrestSurrender {
+  arrest_surrender_id: number;
+  case_master_id: number;
+  arrest_surrender_type_id: number | null;
+  arrest_surrender_date: string | null;
+  arrest_surrender_state_id: number | null;
+  arrest_surrender_district_id: number | null;
+  police_station_id: number | null;
+  io_id: number | null;
+  court_id: number | null;
+  accused_master_id: number | null;
+  is_accused: boolean;
+  is_complainant_accused: boolean;
+}
+
+export interface Chargesheet {
+  csid: number;
+  case_master_id: number;
+  csdate: string | null;
+  cstype: string;
+  police_person_id: number | null;
 }
 
 export interface CaseDetail extends Case {
-  description: string | null;
-  complaint_text: string;
-  station_name?: string | null;
-  officer_name?: string | null;
+  info_received_ps_date: string | null;
+  brief_facts: string | null;
+  registering_officer_name: string | null;
+  court_name: string | null;
+
+  complainants: Complainant[];
+  act_sections: ActSection[];
+  victims: Victim[];
+  accused: Accused[];
+  arrest_surrenders: ArrestSurrender[];
+  chargesheets: Chargesheet[];
 }
 
 export interface CaseListResponse {
@@ -44,63 +122,12 @@ export interface CaseListResponse {
   page: Page;
 }
 
-export interface Suspect {
-  suspect_id: string;
-  case_id: string;
-  citizen_id: string;
-  role: string;
-  arrest_status: string;
-}
-
-export interface Victim {
-  victim_id: string;
-  case_id: string;
-  citizen_id: string;
-  injury_level: string;
-}
-
-export interface Evidence {
-  evidence_id: string;
-  case_id: string;
-  evidence_type: string;
-  description: string | null;
-  status: string;
-  collected_by: string | null;
-}
-
-export interface DigitalEvidence {
-  digital_evidence_id: string;
-  case_id: string;
-  file_type: string;
-  file_name: string | null;
-  phone_number: string | null;
-  email: string | null;
-  ip_address: string | null;
-  uploaded_by: string | null;
-  status: string;
-  extracted_entities: string | null;
-}
-
-export interface InvestigationNote {
-  note_id: string;
-  case_id: string;
-  officer_id: string;
-  note: string;
-}
-
-export interface TimelineEvent {
-  event_id: string;
-  case_id: string;
-  event: string;
-}
-
 export interface SimilarCase {
-  case_id: string;
-  fir_number: string;
-  crime_type: string;
-  status: string;
-  district: string;
-  pattern_id: string | null;
+  case_master_id: number;
+  crime_no: string;
+  crime_sub_head_name: string | null;
+  case_status_name: string | null;
+  district_name: string | null;
   similarity_reason: string;
 }
 
@@ -122,7 +149,7 @@ export interface CitizenCaseLink {
   fir_number: string;
   crime_type: string;
   status: string;
-  role: "Suspect" | "Victim" | string;
+  role: string;
 }
 
 export interface RelationshipEdge {
@@ -188,10 +215,10 @@ export interface DashboardRecent {
   cases: Case[];
 }
 export interface AuditLog {
-  log_id: string;
+  log_id: number;
   user_id: string;
   action: string;
-  case_id: string | null;
+  case_master_id: number | null;
   timestamp: string;
   ip_address: string;
 }
@@ -229,11 +256,11 @@ export interface Officer {
 }
 
 export interface Station {
-  station_id: string;
-  station_name: string;
-  district: string;
-  city: string;
-  phone: string;
+  unit_id: number;
+  unit_name: string;
+  unit_type_name: string;
+  district_name: string | null;
+  active: boolean;
 }
 
 export interface User {
@@ -244,4 +271,30 @@ export interface User {
   station_id: string | null;
   status: string;
   last_login: string | null;
+}
+
+export interface CrimeTrendPoint {
+  period: string;
+  crime_type: string;
+  count: number;
+}
+
+export interface CrimeTrendsOut {
+  district: string | null;
+  period: string;
+  points: CrimeTrendPoint[];
+}
+
+export interface HotspotOut {
+  district: string;
+  case_count: number;
+  top_crime_type: string | null;
+}
+
+export interface PatternSummaryOut {
+  pattern_id: string;
+  crime_type: string;
+  modus_operandi: string | null;
+  risk_level: string;
+  case_count: number;
 }

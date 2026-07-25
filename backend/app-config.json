@@ -1,0 +1,21 @@
+{
+	"command": "sh -c \"uvicorn app.main:app --host 0.0.0.0 --port ${X_ZOHO_CATALYST_LISTEN_PORT:-8000}\"",
+	"build_path": "./",
+	"stack": "python_3_9",
+	"env_variables": {
+		"ENV": "development",
+		"DATABASE_URL": "postgresql://neondb_owner:npg_LsmV1DQP8FXc@ep-frosty-fog-azsfh9vh-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+		"JWT_SECRET": "336d33949d69ed0e40da913e61174eebd0be737581db820c41977de5db1368b03c18ed15b263e03e8041a4cec93ccce7839d209276c7ac45c63202122b9a75fc",
+		"JWT_ALGORITHM": "HS256",
+		"ACCESS_TOKEN_EXPIRE_MINUTES": "30",
+		"REFRESH_TOKEN_EXPIRE_MINUTES": "10080",
+		"OPENAI_OR_LLM_API_KEY": "",
+		"VECTOR_DB_URL": "",
+		"CORS_ORIGINS": "[\"https://ksp-crime-ai-frontend-50043881632.development.catalystappsail.in\"]"
+	},
+	"memory": 256,
+	"scripts": {
+		"preserve": "python3 -m pip install -r ./requirements.txt -t ./ --upgrade",
+		"predeploy": "python3 -m pip install -r ./requirements.txt -t ./ --upgrade"
+	}
+}

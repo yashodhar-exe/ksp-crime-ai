@@ -2,7 +2,7 @@ import { client } from "./client";
 
 export interface CrimeTrendPoint {
   period: string;
-  crime_type: string;
+  crime_sub_head_name: string;
   count: number;
 }
 export interface CrimeTrendsOut {
@@ -11,15 +11,13 @@ export interface CrimeTrendsOut {
   points: CrimeTrendPoint[];
 }
 export interface HotspotOut {
-  district: string;
+  district_name: string;
   case_count: number;
-  top_crime_type: string | null;
+  top_crime_sub_head_name: string | null;
 }
-export interface PatternSummaryOut {
-  pattern_id: string;
-  crime_type: string;
-  modus_operandi: string | null;
-  risk_level: string;
+export interface CrimeHeadOut {
+  crime_head_id: number;
+  crime_group_name: string;
   case_count: number;
 }
 
@@ -31,7 +29,7 @@ export async function getHotspots() {
   const res = await client.get<HotspotOut[]>("/analytics/hotspots");
   return res.data;
 }
-export async function getPatterns() {
-  const res = await client.get<PatternSummaryOut[]>("/analytics/patterns");
+export async function getCrimeHeads() {
+  const res = await client.get<CrimeHeadOut[]>("/analytics/crime-heads");
   return res.data;
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useAsync } from "@/hooks/useAsync";
-import { getCrimeTrends, getHotspots, getPatterns } from "@/api/analytics";
+import { getCrimeTrends, getHotspots, getCrimeHeads } from "@/api/analytics";
 import { LoadingState, ErrorState } from "@/components/ui/States";
 import { Icon } from "@/components/ui/Icon";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
@@ -10,20 +10,37 @@ export default function AnalyticsPage() {
   const [district, setDistrict] = useState("");
   const trends = useAsync(() => getCrimeTrends({ district: district || undefined }), [district]);
   const hotspots = useAsync(getHotspots, []);
-  const patterns = useAsync(getPatterns, []);
+  const crimeHeads = useAsync(getCrimeHeads, []);
 
-  // Reshape trend points (period, crime_type, count) into recharts-friendly rows per period.
+  // Reshape trend points (period, crime_sub_head_name, count) into recharts-friendly rows per period.
   const chartData = (() => {
     if (!trends.data) return [];
+    const allCrimeTypes = Array.from(new Set(trends.data.points.map((p) => p.crime_sub_head_name)));
     const byPeriod = new Map<string, Record<string, number | string>>();
+
+    // First, initialize every period with 0 for every crime type to prevent broken lines
     for (const p of trends.data.points) {
-      const row = byPeriod.get(p.period) ?? { period: p.period };
-      row[p.crime_type] = p.count;
-      byPeriod.set(p.period, row);
+      if (!byPeriod.has(p.period)) {
+        const row: Record<string, number | string> = { period: p.period };
+        for (const ct of allCrimeTypes) {
+          row[ct] = 0;
+        }
+        byPeriod.set(p.period, row);
+      }
     }
-    return Array.from(byPeriod.values());
+
+    // Then fill in the actual counts
+    for (const p of trends.data.points) {
+      const row = byPeriod.get(p.period)!;
+      row[p.crime_sub_head_name] = p.count;
+    }
+
+    // Sort chronologically to prevent line zigzags
+    return Array.from(byPeriod.values()).sort((a, b) =>
+      String(a.period).localeCompare(String(b.period))
+    );
   })();
-  const crimeTypesInChart = Array.from(new Set(trends.data?.points.map((p) => p.crime_type) ?? [])).slice(0, 5);
+  const crimeTypesInChart = Array.from(new Set(trends.data?.points.map((p) => p.crime_sub_head_name) ?? [])).slice(0, 5);
   const COLORS = ["#0b1f5e", "#1d4ed8", "#8b5cf6", "#dc2626", "#059669"];
 
   return (
@@ -63,9 +80,9 @@ export default function AnalyticsPage() {
           {hotspots.loading ? <LoadingState /> : hotspots.error ? <ErrorState message={hotspots.error} /> : (
             <ul className="space-y-2 text-sm max-h-64 overflow-y-auto">
               {hotspots.data!.slice(0, 12).map((h) => (
-                <li key={h.district} className="flex justify-between">
-                  <span>{h.district}</span>
-                  <span className="text-xs text-on-surface-variant">{h.case_count} cases {h.top_crime_type ? `· ${h.top_crime_type}` : ""}</span>
+                <li key={h.district_name} className="flex justify-between">
+                  <span>{h.district_name}</span>
+                  <span className="text-xs text-on-surface-variant">{h.case_count} cases {h.top_crime_sub_head_name ? `· ${h.top_crime_sub_head_name}` : ""}</span>
                 </li>
               ))}
             </ul>
@@ -77,24 +94,22 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="card p-4">
-        <h2 className="text-sm font-semibold text-on-surface mb-4">Crime Patterns & Risk Levels</h2>
-        {patterns.loading ? <LoadingState /> : patterns.error ? <ErrorState message={patterns.error} /> : (
+        <h2 className="text-sm font-semibold text-on-surface mb-4">Crime Heads Summary</h2>
+        {crimeHeads.loading ? <LoadingState /> : crimeHeads.error ? <ErrorState message={crimeHeads.error} /> : (
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th className="px-4 py-2">Crime Type</th>
-                <th className="px-4 py-2">Modus Operandi</th>
-                <th className="px-4 py-2">Risk Level</th>
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2">Crime Group Name</th>
                 <th className="px-4 py-2">Case Count</th>
               </tr>
             </thead>
             <tbody>
-              {patterns.data!.map((p) => (
-                <tr key={p.pattern_id} className="border-t border-outline-variant/50">
-                  <td className="px-4 py-2">{p.crime_type}</td>
-                  <td className="px-4 py-2">{p.modus_operandi ?? "—"}</td>
-                  <td className="px-4 py-2">{p.risk_level}</td>
-                  <td className="px-4 py-2">{p.case_count}</td>
+              {crimeHeads.data!.map((c) => (
+                <tr key={c.crime_head_id} className="border-t border-outline-variant/50">
+                  <td className="px-4 py-2">{c.crime_head_id}</td>
+                  <td className="px-4 py-2">{c.crime_group_name}</td>
+                  <td className="px-4 py-2">{c.case_count}</td>
                 </tr>
               ))}
             </tbody>

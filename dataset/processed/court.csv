@@ -1,0 +1,41 @@
+court_id,court_name,district_id,state_id,active
+1,"JMFC Court, Bengaluru Urban",1,1,True
+2,"Principal District & Sessions Court, Bengaluru Urban",1,1,True
+3,"JMFC Court, Bengaluru Rural",2,1,True
+4,"Principal District & Sessions Court, Bengaluru Rural",2,1,True
+5,"JMFC Court, Mysuru",3,1,True
+6,"Principal District & Sessions Court, Mysuru",3,1,True
+7,"JMFC Court, Mangaluru (Dakshina Kannada)",4,1,True
+8,"Principal District & Sessions Court, Mangaluru (Dakshina Kannada)",4,1,True
+9,"JMFC Court, Belagavi",5,1,True
+10,"Principal District & Sessions Court, Belagavi",5,1,True
+11,"JMFC Court, Kalaburagi",6,1,True
+12,"Principal District & Sessions Court, Kalaburagi",6,1,True
+13,"JMFC Court, Hubballi-Dharwad",7,1,True
+14,"Principal District & Sessions Court, Hubballi-Dharwad",7,1,True
+15,"JMFC Court, Ballari",8,1,True
+16,"Principal District & Sessions Court, Ballari",8,1,True
+17,"JMFC Court, Tumakuru",9,1,True
+18,"Principal District & Sessions Court, Tumakuru",9,1,True
+19,"JMFC Court, Shivamogga",10,1,True
+20,"Principal District & Sessions Court, Shivamogga",10,1,True
+21,"JMFC Court, Davanagere",11,1,True
+22,"Principal District & Sessions Court, Davanagere",11,1,True
+23,"JMFC Court, Vijayapura",12,1,True
+24,"Principal District & Sessions Court, Vijayapura",12,1,True
+25,"JMFC Court, Raichur",13,1,True
+26,"Principal District & Sessions Court, Raichur",13,1,True
+27,"JMFC Court, Udupi",14,1,True
+28,"Principal District & Sessions Court, Udupi",14,1,True
+29,"JMFC Court, Chikkamagaluru",15,1,True
+30,"Principal District & Sessions Court, Chikkamagaluru",15,1,True
+31,"JMFC Court, Hassan",16,1,True
+32,"Principal District & Sessions Court, Hassan",16,1,True
+33,"JMFC Court, Mandya",17,1,True
+34,"Principal District & Sessions Court, Mandya",17,1,True
+35,"JMFC Court, Kolar",18,1,True
+36,"Principal District & Sessions Court, Kolar",18,1,True
+37,"JMFC Court, Chitradurga",19,1,True
+38,"Principal District & Sessions Court, Chitradurga",19,1,True
+39,"JMFC Court, Bidar",20,1,True
+40,"Principal District & Sessions Court, Bidar",20,1,True

@@ -5,6 +5,7 @@ import { decodeJwt } from "@/api/jwt";
 
 interface AuthUser {
   user_id: string;
+  username: string;
   role_id: string;
   station_id: string | null;
 }
@@ -25,7 +26,7 @@ function userFromToken(): AuthUser | null {
   const claims = decodeJwt(token);
   if (!claims) return null;
   if (claims.exp * 1000 < Date.now()) return null;
-  return { user_id: claims.sub, role_id: claims.role_id, station_id: claims.station_id };
+  return { user_id: claims.sub, username: claims.username, role_id: claims.role_id, station_id: claims.station_id };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

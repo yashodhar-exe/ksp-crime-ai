@@ -1,0 +1,13 @@
+rank_id,rank_name,hierarchy,active
+1,DGP,0,True
+2,ADGP,1,True
+3,IGP,2,True
+4,DIG,3,True
+5,SP,4,True
+6,Addl. SP,5,True
+7,DySP,6,True
+8,PI,7,True
+9,PSI,8,True
+10,ASI,9,True
+11,HC,10,True
+12,PC,11,True

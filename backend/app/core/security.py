@@ -30,11 +30,11 @@ def _create_token(subject: str, expires_delta: timedelta, extra_claims: dict[str
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 
-def create_access_token(user_id: str, role_id: str, station_id: str | None) -> str:
+def create_access_token(user_id: str, username: str, role_id: str, station_id: str | None) -> str:
     return _create_token(
         subject=user_id,
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-        extra_claims={"type": "access", "role_id": role_id, "station_id": station_id},
+        extra_claims={"type": "access", "username": username, "role_id": role_id, "station_id": station_id},
     )
 
 

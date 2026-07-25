@@ -38,11 +38,11 @@ export default function LoginPage() {
       <main className="w-full max-w-[440px] z-10">
         <div className="bg-surface-container-lowest rounded-xl p-6 flex flex-col items-center border border-card-border shadow-sm">
           <div className="mb-6 flex flex-col items-center text-center">
-            <div className="w-16 h-16 mb-4 rounded-full bg-primary-container flex items-center justify-center">
-              <Icon name="shield" className="text-on-primary text-4xl" filled />
+            <div className="w-24 h-24 mb-4 flex items-center justify-center">
+              <img src="/src/assets/Karnataka Police.svg" alt="Karnataka Police Logo" className="w-full h-full object-contain drop-shadow-md" />
             </div>
-            <h1 className="text-2xl font-semibold text-on-background mb-1">Secure Officer Login</h1>
-            <p className="text-sm text-on-surface-variant">KSP AI Platform Analytical Unit</p>
+            <h1 className="text-2xl font-semibold text-on-background mb-1">Karnataka Police</h1>
+            <p className="text-sm text-on-surface-variant">KSP Crime AI</p>
           </div>
 
           <form onSubmit={handleSubmit} className="w-full space-y-6">
@@ -100,8 +100,7 @@ export default function LoginPage() {
                 </>
               ) : (
                 <>
-                  Authenticate
-                  <Icon name="verified_user" className="text-lg" />
+                  Login
                 </>
               )}
             </button>
@@ -115,16 +114,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <footer className="mt-6 flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-error/10 border border-error/20 rounded-full">
-            <Icon name="gpp_maybe" className="text-error text-base" filled />
-            <span className="text-xs text-error font-semibold">Security Notice: Authorized Access Only</span>
-          </div>
-          <p className="text-xs text-outline text-center px-6">
-            All login attempts and system activities are monitored and logged. Unauthorized access is
-            subject to prosecution under the IT Act and Police Discipline Rules.
-          </p>
-        </footer>
+
       </main>
     </div>
   );

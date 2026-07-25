@@ -1,0 +1,8 @@
+state_id,state_name,nationality_id,active
+1,Karnataka,1,True
+2,Andhra Pradesh,1,True
+3,Tamil Nadu,1,True
+4,Kerala,1,True
+5,Maharashtra,1,True
+6,Telangana,1,True
+7,Goa,1,True

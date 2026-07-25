@@ -1,11 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useAuth } from "@/context/AuthContext";
 import { getRole } from "@/types/roles";
 import { Icon } from "@/components/ui/Icon";
 
 export default function SettingsPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const role = getRole(user?.role_id);
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
 
   return (
     <AppLayout title="System Settings & Security">
@@ -38,10 +45,16 @@ export default function SettingsPage() {
             <Icon name="gpp_maybe" className="text-error" filled />
             <h2 className="text-sm font-semibold text-on-surface">Security Notice</h2>
           </div>
-          <p className="text-xs text-on-surface-variant">
+          <p className="text-xs text-on-surface-variant mb-4">
             All access to this platform is logged in the audit trail, including case views, exports,
             and searches. Session tokens expire automatically; use the logout button when stepping away.
           </p>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-error/10 text-error rounded-md text-sm font-semibold hover:bg-error/20 transition-colors"
+          >
+            <Icon name="logout" /> Logout
+          </button>
         </div>
       </div>
     </AppLayout>

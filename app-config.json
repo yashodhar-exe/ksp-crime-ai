@@ -1,0 +1,14 @@
+{
+	"command": "node server.js",
+	"build_path": "./",
+	"stack": "nodejs18",
+	"env_variables": {
+		"VITE_API_BASE_URL": "/api/v1",
+		"API_PROXY_TARGET": "https://ksp-crime-ai-backe-50043881632.development.catalystappsail.in"
+	},
+	"memory": 256,
+	"scripts": {
+		"preserve": "npm install && npm run build",
+		"predeploy": "npm install && npm run build"
+	}
+}

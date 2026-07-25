@@ -59,7 +59,7 @@ export default function RegisterPage() {
               <Icon name="person_add" className="text-on-primary text-4xl" filled />
             </div>
             <h1 className="text-2xl font-semibold text-on-background mb-1">Officer Registration</h1>
-            <p className="text-sm text-on-surface-variant">KSP AI Platform Analytical Unit</p>
+            <p className="text-sm text-on-surface-variant">KSP Crime AI</p>
           </div>
 
           {submitted ? (
@@ -197,16 +197,7 @@ export default function RegisterPage() {
           )}
         </div>
 
-        <footer className="mt-6 flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-error/10 border border-error/20 rounded-full">
-            <Icon name="gpp_maybe" className="text-error text-base" filled />
-            <span className="text-xs text-error font-semibold">Security Notice: Authorized Access Only</span>
-          </div>
-          <p className="text-xs text-outline text-center px-6">
-            All registrations are reviewed by an administrator before access is granted. Impersonation or false
-            information is subject to prosecution under the IT Act and Police Discipline Rules.
-          </p>
-        </footer>
+
       </main>
     </div>
   );

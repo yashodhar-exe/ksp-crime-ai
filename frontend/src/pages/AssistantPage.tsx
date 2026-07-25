@@ -58,7 +58,6 @@ export default function AssistantPage() {
       <div className="card flex flex-col h-[calc(100vh-8rem)]">
         <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant">
           <div className="flex items-center gap-2">
-            <Icon name="auto_awesome" className="text-ai-accent" />
             <h2 className="text-sm font-semibold text-on-surface">Investigation Copilot</h2>
           </div>
           <button

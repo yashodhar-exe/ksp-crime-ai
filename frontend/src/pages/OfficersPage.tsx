@@ -63,14 +63,14 @@ export default function OfficersPage() {
             {cases.loading ? <LoadingState /> : cases.error ? <ErrorState message={cases.error} /> : (
               <ul className="divide-y divide-outline-variant">
                 {cases.data!.map((c) => (
-                  <li key={c.case_id} className="py-2.5 flex items-center justify-between">
+                  <li key={c.case_master_id} className="py-2.5 flex items-center justify-between">
                     <div>
-                      <Link to={`/cases/${c.case_id}`} className="text-sm font-mono text-secondary hover:underline">{c.fir_number}</Link>
-                      <p className="text-xs text-on-surface-variant">{c.crime_type} · {c.district}</p>
+                      <Link to={`/cases/${c.case_master_id}`} className="text-sm font-mono text-secondary hover:underline">{c.crime_no}</Link>
+                      <p className="text-xs text-on-surface-variant">{c.crime_head_name} · {c.district_name}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <PriorityBadge value={c.priority} />
-                      <StatusBadge value={c.status} />
+                      <PriorityBadge value={c.gravity_name ?? "Unknown"} />
+                      <StatusBadge value={c.case_status_name ?? "Unknown"} />
                     </div>
                   </li>
                 ))}

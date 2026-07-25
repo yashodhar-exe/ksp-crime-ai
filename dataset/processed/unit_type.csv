@@ -1,0 +1,6 @@
+unit_type_id,unit_type_name,city_dist_state,hierarchy,active
+1,Police Station,City,4,True
+2,Circle Office,City,3,True
+3,Sub-Division,District,2,True
+4,District Police Office (SP Office),District,1,True
+5,State Police Headquarters,State,0,True

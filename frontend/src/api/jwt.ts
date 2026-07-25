@@ -3,6 +3,7 @@
 // signature on every request; this is never used for access control.
 export interface AccessTokenClaims {
   sub: string; // user_id
+  username: string;
   role_id: string;
   station_id: string | null;
   type: "access" | "refresh";

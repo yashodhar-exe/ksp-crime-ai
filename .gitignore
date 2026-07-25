@@ -1,0 +1,5 @@
+
+# Regenerable AI artifacts (rebuild via ai/rag/build_index.py and ai/risk_model/train.py)
+ai/rag/vector_store/*.index
+ai/rag/vector_store/*.joblib
+ai/risk_model/model/*.joblib

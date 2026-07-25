@@ -17,7 +17,7 @@ export default function StationsPage() {
   );
 
   if (stationId) {
-    const station = stations.data?.find((s) => s.station_id === stationId);
+    const station = stations.data?.find((s) => s.unit_id.toString() === stationId);
     return (
       <AppLayout title="Station Detail">
         <Link to="/stations" className="text-sm text-secondary font-semibold flex items-center gap-1 mb-4">
@@ -25,8 +25,8 @@ export default function StationsPage() {
         </Link>
         {stations.loading ? <LoadingState /> : station && (
           <div className="card p-5 mb-6">
-            <h2 className="text-lg font-bold text-on-surface">{station.station_name}</h2>
-            <p className="text-sm text-on-surface-variant">{station.city}, {station.district} · {station.phone}</p>
+            <h2 className="text-lg font-bold text-on-surface">{station.unit_name}</h2>
+            <p className="text-sm text-on-surface-variant">{station.district_name || "Unknown District"} · {station.active ? "Active" : "Inactive"}</p>
           </div>
         )}
         <div className="card p-4">
@@ -34,14 +34,14 @@ export default function StationsPage() {
           {stationCases.loading ? <LoadingState /> : stationCases.error ? <ErrorState message={stationCases.error} /> : (
             <ul className="divide-y divide-outline-variant">
               {stationCases.data!.map((c) => (
-                <li key={c.case_id} className="py-2.5 flex items-center justify-between">
+                <li key={c.case_master_id} className="py-2.5 flex items-center justify-between">
                   <div>
-                    <Link to={`/cases/${c.case_id}`} className="text-sm font-mono text-secondary hover:underline">{c.fir_number}</Link>
-                    <p className="text-xs text-on-surface-variant">{c.crime_type}</p>
+                    <Link to={`/cases/${c.case_master_id}`} className="text-sm font-mono text-secondary hover:underline">{c.crime_no}</Link>
+                    <p className="text-xs text-on-surface-variant">{c.crime_head_name}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <PriorityBadge value={c.priority} />
-                    <StatusBadge value={c.status} />
+                    <PriorityBadge value={c.gravity_name ?? "Unknown"} />
+                    <StatusBadge value={c.case_status_name ?? "Unknown"} />
                   </div>
                 </li>
               ))}
@@ -54,9 +54,8 @@ export default function StationsPage() {
 
   const filtered = stations.data?.filter(
     (s) =>
-      s.station_name.toLowerCase().includes(query.toLowerCase()) ||
-      s.district.toLowerCase().includes(query.toLowerCase()) ||
-      s.city.toLowerCase().includes(query.toLowerCase())
+      s.unit_name.toLowerCase().includes(query.toLowerCase()) ||
+      (s.district_name || "").toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -76,13 +75,13 @@ export default function StationsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered!.map((s) => (
-            <Link key={s.station_id} to={`/stations/${s.station_id}`} className="card p-4 hover:shadow-sm transition-shadow">
+            <Link key={s.unit_id} to={`/stations/${s.unit_id}`} className="card p-4 hover:shadow-sm transition-shadow">
               <div className="flex items-center gap-2 mb-1">
                 <Icon name="location_city" className="text-primary-container text-lg" />
-                <h3 className="text-sm font-semibold text-on-surface">{s.station_name}</h3>
+                <h3 className="text-sm font-semibold text-on-surface">{s.unit_name}</h3>
               </div>
-              <p className="text-xs text-on-surface-variant">{s.city}, {s.district}</p>
-              <p className="text-xs text-on-surface-variant font-mono mt-1">{s.phone}</p>
+              <p className="text-xs text-on-surface-variant">{s.district_name || "Unknown District"}</p>
+              <p className="text-xs text-on-surface-variant font-mono mt-1">{s.active ? "Active" : "Inactive"}</p>
             </Link>
           ))}
         </div>

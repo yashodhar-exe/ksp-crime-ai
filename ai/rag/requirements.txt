@@ -1,0 +1,9 @@
+# RAG layer deps — kept separate from backend/requirements.txt since the
+# backend imports this module lazily (only when semantic search is used)
+# and these are heavier packages (torch, faiss) you may not want in every
+# backend deployment target.
+sentence-transformers==3.3.1
+faiss-cpu==1.9.0
+scikit-learn==1.6.0
+joblib==1.4.2
+pandas==2.2.3

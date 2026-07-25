@@ -1,0 +1,9 @@
+designation_id,designation_name,active,sort_order
+1,Investigating Officer,True,1
+2,SHO,True,2
+3,Beat Officer,True,3
+4,Cyber Cell Officer,True,4
+5,Traffic Officer,True,5
+6,Reader,True,6
+7,Admin Staff,True,7
+8,Control Room Officer,True,8

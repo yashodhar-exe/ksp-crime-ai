@@ -1,0 +1,10 @@
+act_code,act_description,short_name,active
+IPC,"Indian Penal Code, 1860",IPC,True
+BNS,"Bharatiya Nyaya Sanhita, 2023",BNS,True
+NDPS,"Narcotic Drugs and Psychotropic Substances Act, 1985",NDPS,True
+POCSO,"Protection of Children from Sexual Offences Act, 2012",POCSO,True
+IT_ACT,"Information Technology Act, 2000",IT Act,True
+MV_ACT,"Motor Vehicles Act, 1988",MV Act,True
+ARMS_ACT,"Arms Act, 1959",Arms Act,True
+EXCISE_ACT,"Karnataka Excise Act, 1965",Excise Act,True
+DOWRY_ACT,"Dowry Prohibition Act, 1961",Dowry Act,True

@@ -1,0 +1,9 @@
+crime_head_id,crime_group_name,active
+1,Crimes Against Body,True
+2,Crimes Against Property,True
+3,Crimes Against Women,True
+4,Cyber Crimes,True
+5,Narcotics & NDPS,True
+6,Public Order & Riots,True
+7,Economic Offences,True
+8,Special & Local Laws,True
