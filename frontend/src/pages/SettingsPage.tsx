@@ -41,14 +41,6 @@ export default function SettingsPage() {
         </div>
 
         <div className="card p-5 border-error/30">
-          <div className="flex items-center gap-2 mb-2">
-            <Icon name="gpp_maybe" className="text-error" filled />
-            <h2 className="text-sm font-semibold text-on-surface">Security Notice</h2>
-          </div>
-          <p className="text-xs text-on-surface-variant mb-4">
-            All access to this platform is logged in the audit trail, including case views, exports,
-            and searches. Session tokens expire automatically; use the logout button when stepping away.
-          </p>
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 bg-error/10 text-error rounded-md text-sm font-semibold hover:bg-error/20 transition-colors"

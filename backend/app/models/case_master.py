@@ -72,3 +72,41 @@ class CaseMaster(Base):
     chargesheets: Mapped[list["ChargesheetDetails"]] = relationship(  # noqa: F821
         back_populates="case", cascade="all, delete-orphan"
     )
+
+    @property
+    def case_category_name(self) -> str | None:
+        return self.case_category.category_name if self.case_category else None
+
+    @property
+    def case_status_name(self) -> str | None:
+        return self.case_status.status_name if self.case_status else None
+
+    @property
+    def gravity_name(self) -> str | None:
+        return self.gravity_offence.gravity_name if self.gravity_offence else None
+
+    @property
+    def crime_head_name(self) -> str | None:
+        return self.crime_major_head.head_name if self.crime_major_head else None
+
+    @property
+    def crime_sub_head_name(self) -> str | None:
+        return self.crime_minor_head.sub_head_name if self.crime_minor_head else None
+
+    @property
+    def police_station_name(self) -> str | None:
+        return self.police_station.unit_name if self.police_station else None
+
+    @property
+    def district_name(self) -> str | None:
+        if self.police_station and self.police_station.district:
+            return self.police_station.district.district_name
+        return None
+
+    @property
+    def registering_officer_name(self) -> str | None:
+        return self.registering_officer.person_name if self.registering_officer else None
+
+    @property
+    def court_name(self) -> str | None:
+        return self.court.court_name if self.court else None

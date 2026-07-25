@@ -18,7 +18,8 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
 def _caller_district(current_user: User) -> str | None:
-    user_district = current_user.station.district if current_user.station else None
+    # TODO: Fetch district from station_id if needed, but for now fallback to None
+    user_district = None
     return scoped_district(current_user.role, user_district)
 
 

@@ -25,7 +25,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 # one (via POST /users). Every other role can be requested at signup, but
 # the account sits as "Pending" until an admin approves it (see
 # api/routes/users.py: approve_user / reject_user).
-NON_SELF_REGISTRABLE_ROLES = {"ROLE01"}
+NON_SELF_REGISTRABLE_ROLES = {"R1"}
 
 
 @router.post("/login", response_model=TokenResponse)

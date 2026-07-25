@@ -1,37 +1,30 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
-from app.models.case import Case
+from app.models.case_master import CaseMaster
+from app.models.lookups import Unit
 
 
-def find_similar_cases(db: Session, case: Case, limit: int = 10) -> list[tuple[Case, str]]:
+def find_similar_cases(db: Session, case: CaseMaster, limit: int = 10) -> list[tuple[CaseMaster, str]]:
     """
-    MVP similarity: same crime_type always qualifies; same pattern_id (when
-    the source case has one) is a stronger signal and is returned first.
-    This stands in for the "predictive analytics" scope note in the root
-    README — full ML-based similarity can replace this function later
-    without touching the route/schema layer.
+    MVP similarity: same crime_major_head_id always qualifies.
     """
-    results: list[tuple[Case, str]] = []
+    results: list[tuple[CaseMaster, str]] = []
 
-    if case.pattern_id:
-        stmt = (
-            select(Case)
-            .where(Case.pattern_id == case.pattern_id, Case.case_id != case.case_id)
-            .limit(limit)
+    stmt = (
+        select(CaseMaster)
+        .options(
+            joinedload(CaseMaster.police_station).joinedload(Unit.district),
+            joinedload(CaseMaster.case_status),
+            joinedload(CaseMaster.crime_major_head),
+            joinedload(CaseMaster.crime_minor_head),
+            joinedload(CaseMaster.case_category),
+            joinedload(CaseMaster.gravity_offence)
         )
-        for c in db.execute(stmt).scalars().all():
-            results.append((c, "Same crime pattern"))
-
-    if len(results) < limit:
-        remaining = limit - len(results)
-        seen_ids = {c.case_id for c, _ in results} | {case.case_id}
-        stmt = (
-            select(Case)
-            .where(Case.crime_type == case.crime_type, Case.case_id.not_in(seen_ids))
-            .limit(remaining)
-        )
-        for c in db.execute(stmt).scalars().all():
-            results.append((c, "Same crime type"))
+        .where(CaseMaster.crime_major_head_id == case.crime_major_head_id, CaseMaster.case_master_id != case.case_master_id)
+        .limit(limit)
+    )
+    for c in db.execute(stmt).scalars().all():
+        results.append((c, "Same crime type"))
 
     return results

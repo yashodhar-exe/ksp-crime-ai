@@ -4,16 +4,16 @@ import { register as apiRegister } from "@/api/auth";
 import { Icon } from "@/components/ui/Icon";
 import { ROLES } from "@/types/roles";
 
-// Admin (ROLE01) is never self-registrable — only an existing admin can
+// Admin (R1) is never self-registrable — only an existing admin can
 // create another admin account (see UsersPage.tsx). Mirrors the backend
 // check in api/routes/auth.py (NON_SELF_REGISTRABLE_ROLES).
-const SELF_REGISTRABLE_ROLES = Object.values(ROLES).filter((r) => r.role_id !== "ROLE01");
+const SELF_REGISTRABLE_ROLES = Object.values(ROLES).filter((r) => r.role_id !== "R1");
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [roleId, setRoleId] = useState(SELF_REGISTRABLE_ROLES[SELF_REGISTRABLE_ROLES.length - 1]?.role_id ?? "ROLE06");
+  const [roleId, setRoleId] = useState(SELF_REGISTRABLE_ROLES[SELF_REGISTRABLE_ROLES.length - 1]?.role_id ?? "R6");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);

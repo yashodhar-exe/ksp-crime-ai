@@ -12,12 +12,12 @@ export interface RoleDef {
 }
 
 export const ROLES: Record<string, RoleDef> = {
-  ROLE01: { role_id: "ROLE01", role_name: "Admin", level: 1, can_view_all_districts: true, can_export: true, can_edit_case: true, can_manage_users: true },
-  ROLE02: { role_id: "ROLE02", role_name: "SP", level: 2, can_view_all_districts: true, can_export: true, can_edit_case: true, can_manage_users: false },
-  ROLE03: { role_id: "ROLE03", role_name: "DSP", level: 3, can_view_all_districts: false, can_export: true, can_edit_case: true, can_manage_users: false },
-  ROLE04: { role_id: "ROLE04", role_name: "Inspector", level: 4, can_view_all_districts: false, can_export: true, can_edit_case: true, can_manage_users: false },
-  ROLE05: { role_id: "ROLE05", role_name: "Sub Inspector", level: 5, can_view_all_districts: false, can_export: false, can_edit_case: true, can_manage_users: false },
-  ROLE06: { role_id: "ROLE06", role_name: "Constable", level: 6, can_view_all_districts: false, can_export: false, can_edit_case: false, can_manage_users: false },
+  R1: { role_id: "R1", role_name: "Admin", level: 1, can_view_all_districts: true, can_export: true, can_edit_case: true, can_manage_users: true },
+  R2: { role_id: "R2", role_name: "SP", level: 2, can_view_all_districts: true, can_export: true, can_edit_case: true, can_manage_users: false },
+  R3: { role_id: "R3", role_name: "DSP", level: 3, can_view_all_districts: false, can_export: true, can_edit_case: true, can_manage_users: false },
+  R4: { role_id: "R4", role_name: "Inspector", level: 4, can_view_all_districts: false, can_export: true, can_edit_case: true, can_manage_users: false },
+  R5: { role_id: "R5", role_name: "Sub Inspector", level: 5, can_view_all_districts: false, can_export: false, can_edit_case: true, can_manage_users: false },
+  R6: { role_id: "R6", role_name: "Constable", level: 6, can_view_all_districts: false, can_export: false, can_edit_case: false, can_manage_users: false },
 };
 
 export function getRole(roleId: string | undefined | null): RoleDef | null {

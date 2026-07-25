@@ -1,26 +1,29 @@
 """
 Bridges chat.py routes to the ai/ layer described in ai/README.md
-(rag/, chatbot/nl_to_sql.py, etc). That layer isn't implemented yet, so
-this module ships a working fallback — Postgres full-text search over
-`cases.complaint_text` (the GIN index schema.sql already creates for this
-purpose) — so /chat/query returns real, grounded answers today instead of
-a placeholder. Swap `_fallback_answer` for a call into ai/rag once that
-pipeline exists; the ChatQueryResponse contract (answer + sources) is
-already what a RAG response would look like.
 """
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.config import settings
-from app.models.case import Case
+from app.models.case_master import CaseMaster
 from app.schemas.chat import ChatQueryResponse, ChatSource
+from app.models.lookups import Unit, District, CrimeHead
 
 
 def _fallback_answer(db: Session, question: str, session_id: str) -> ChatQueryResponse:
+    # Full text search fallback - mock for now since complaint text was moved/removed in CaseMaster schema
     tsquery = func.plainto_tsquery("english", question)
+    
+    # We will just search crime group names instead as a fallback
     stmt = (
-        select(Case)
-        .where(func.to_tsvector("english", Case.complaint_text).op("@@")(tsquery))
+        select(CaseMaster)
+        .options(
+            joinedload(CaseMaster.police_station).joinedload(Unit.district),
+            joinedload(CaseMaster.case_status),
+            joinedload(CaseMaster.crime_major_head)
+        )
+        .join(CrimeHead, CaseMaster.crime_major_head_id == CrimeHead.crime_head_id)
+        .where(func.to_tsvector("english", CrimeHead.crime_group_name).op("@@")(tsquery))
         .limit(5)
     )
     matches = db.execute(stmt).scalars().all()
@@ -28,19 +31,23 @@ def _fallback_answer(db: Session, question: str, session_id: str) -> ChatQueryRe
     if not matches:
         return ChatQueryResponse(
             session_id=session_id,
-            answer="I couldn't find any cases matching that question in the complaint narratives.",
+            answer="I couldn't find any cases matching that question.",
             sources=[],
         )
 
     summary_lines = [f"Found {len(matches)} case(s) related to your question:"]
     sources = []
     for case in matches:
-        summary_lines.append(f"- {case.fir_number} ({case.crime_type}, {case.status}, {case.district})")
+        crime_type = case.crime_head_name or "Unknown"
+        status = case.case_status_name or "Unknown"
+        district = case.police_station.district.district_name if case.police_station and case.police_station.district else "Unknown"
+        
+        summary_lines.append(f"- {case.crime_no} ({crime_type}, {status}, {district})")
         sources.append(
             ChatSource(
-                case_id=case.case_id,
-                fir_number=case.fir_number,
-                snippet=case.complaint_text[:280],
+                case_id=str(case.case_master_id),
+                fir_number=case.crime_no,
+                snippet=crime_type,
             )
         )
 
@@ -50,7 +57,5 @@ def _fallback_answer(db: Session, question: str, session_id: str) -> ChatQueryRe
 def answer_question(db: Session, question: str, session_id: str) -> ChatQueryResponse:
     if settings.OPENAI_OR_LLM_API_KEY and settings.VECTOR_DB_URL:
         # TODO: call into ai/rag once the embedding pipeline + vector store
-        # exist (ai/rag/vector_store/). Left unimplemented on purpose so we
-        # don't silently pretend to call an LLM that isn't wired up.
         pass
     return _fallback_answer(db, question, session_id)

@@ -1,28 +1,20 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.case import Case
-from app.models.search_index import SearchIndex
+from app.models.case_master import CaseMaster
 
-
-def search_entity(db: Session, *, entity_type: str | None, value: str) -> list[tuple[SearchIndex, Case]]:
+def search_entity(db: Session, *, entity_type: str | None, value: str) -> list[tuple[None, CaseMaster]]:
     """
-    Uses the (entity_type, entity_value) composite index defined in
-    schema.sql. entity_value is matched with ILIKE so partial phone
-    numbers / partial names still surface results.
+    Mocked search for now as the SearchIndex table is no longer used in the new schema.
     """
     stmt = (
-        select(SearchIndex, Case)
-        .join(Case, Case.case_id == SearchIndex.case_id)
-        .where(SearchIndex.entity_value.ilike(f"%{value}%"))
+        select(CaseMaster)
+        .where(CaseMaster.crime_no.ilike(f"%{value}%"))
+        .limit(10)
     )
-    if entity_type:
-        stmt = stmt.where(SearchIndex.entity_type == entity_type)
-    stmt = stmt.limit(100)
-
-    return [(row[0], row[1]) for row in db.execute(stmt)]
+    return [(None, row) for row in db.execute(stmt).scalars()]
 
 
-def find_by_fir(db: Session, fir_number: str) -> Case | None:
-    stmt = select(Case).where(Case.fir_number == fir_number)
+def find_by_fir(db: Session, fir_number: str) -> CaseMaster | None:
+    stmt = select(CaseMaster).where(CaseMaster.crime_no == fir_number)
     return db.execute(stmt).scalar_one_or_none()
