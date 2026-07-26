@@ -2,7 +2,10 @@ import { client, setTokens, clearTokens } from "./client";
 import type { CurrentUser } from "@/types/api";
 
 export async function login(username: string, password: string) {
-  const res = await client.post("/auth/login", { username, password });
+  const params = new URLSearchParams();
+  params.append("username", username);
+  params.append("password", password);
+  const res = await client.post("/auth/login", params);
   setTokens(res.data.access_token, res.data.refresh_token);
   return res.data as { access_token: string; refresh_token: string; token_type: string };
 }

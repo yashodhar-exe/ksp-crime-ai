@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+import fastapi
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -30,11 +31,16 @@ NON_SELF_REGISTRABLE_ROLES = {"R1"}
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)) -> TokenResponse:
-    stmt = select(User).where(User.username == payload.username)
+def login(
+    request: Request,
+    username: str = fastapi.Form(...),
+    password: str = fastapi.Form(...),
+    db: Session = Depends(get_db)
+) -> TokenResponse:
+    stmt = select(User).where(User.username == username)
     user = db.execute(stmt).scalar_one_or_none()
 
-    if user is None or not user.hashed_password or not verify_password(payload.password, user.hashed_password):
+    if user is None or not user.hashed_password or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
     if user.status == "Pending":
         raise HTTPException(
@@ -66,37 +72,43 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
 
 
 @router.post("/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED)
-def register(payload: RegisterRequest, request: Request, db: Session = Depends(get_db)) -> RegisterResponse:
+def register(
+    request: Request,
+    username: str = fastapi.Form(...),
+    password: str = fastapi.Form(...),
+    role_id: str = fastapi.Form(...),
+    db: Session = Depends(get_db)
+) -> RegisterResponse:
     """
     Public self-registration. The account is created with status='Pending'
     and cannot log in (see `login` above) until an admin approves it via
     POST /users/{user_id}/approve.
     """
-    if payload.role_id in NON_SELF_REGISTRABLE_ROLES:
+    if role_id in NON_SELF_REGISTRABLE_ROLES:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="This role cannot be self-registered. Contact an administrator.",
         )
 
-    role = db.get(Role, payload.role_id)
+    role = db.get(Role, role_id)
     if role is None:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Invalid role selected.")
 
-    if len(payload.password) < 8:
+    if len(password) < 8:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Password must be at least 8 characters.",
         )
 
-    existing = db.execute(select(User).where(User.username == payload.username)).scalar_one_or_none()
+    existing = db.execute(select(User).where(User.username == username)).scalar_one_or_none()
     if existing is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username already exists")
 
     user = User(
         user_id=f"USR{uuid.uuid4().hex[:7].upper()}",
-        username=payload.username,
-        hashed_password=hash_password(payload.password),
-        role_id=payload.role_id,
+        username=username,
+        hashed_password=hash_password(password),
+        role_id=role_id,
         status="Pending",
     )
     db.add(user)
