@@ -12,7 +12,7 @@ from app.db.session import SessionLocal
 # Setup Google GenAI via REST (to avoid grpcio memory crash on Catalyst)
 import httpx
 
-if settings.OPENAI_OR_LLM_API_KEY:
+if settings.GEMINI_API_KEY:
     # Key is set in app-config.json for production
     pass
 
@@ -204,9 +204,9 @@ def _fallback_answer(db: Session, question: str, session_id: str) -> ChatQueryRe
     return ChatQueryResponse(session_id=session_id, answer="\n".join(summary_lines), sources=sources)
 
 def answer_question(db: Session, question: str, session_id: str) -> ChatQueryResponse:
-    if settings.OPENAI_OR_LLM_API_KEY:
+    if settings.GEMINI_API_KEY:
         history = chat_store.get_history(session_id)
-        answer = _call_gemini_rest(settings.OPENAI_OR_LLM_API_KEY, history, question)
+        answer = _call_gemini_rest(settings.GEMINI_API_KEY, history, question)
         if answer:
             return ChatQueryResponse(session_id=session_id, answer=answer, sources=[])
             

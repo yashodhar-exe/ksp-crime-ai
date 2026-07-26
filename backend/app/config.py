@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
     # --- AI / RAG (optional, used by services/nlp_service.py) ---
-    OPENAI_OR_LLM_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
     VECTOR_DB_URL: str = ""
 
     # --- CORS ---
