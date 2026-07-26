@@ -2,9 +2,12 @@ import { client } from "./client";
 import type { ChatQueryResponse, ChatHistory } from "@/types/api";
 
 export async function sendChatQuery(question: string, sessionId?: string) {
-  const res = await client.post<ChatQueryResponse>("/chat/query", {
-    question,
-    session_id: sessionId,
+  const form = new URLSearchParams();
+  form.append("question", question);
+  if (sessionId) form.append("session_id", sessionId);
+
+  const res = await client.post<ChatQueryResponse>("/chat/query", form, {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
   });
   return res.data;
 }
@@ -15,6 +18,12 @@ export async function getChatHistory(sessionId: string) {
 }
 
 export async function exportChat(sessionId: string) {
-  const res = await client.post("/chat/export", { session_id: sessionId }, { responseType: "blob" });
+  const form = new URLSearchParams();
+  form.append("session_id", sessionId);
+
+  const res = await client.post("/chat/export", form, {
+    responseType: "blob",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+  });
   return res.data as Blob;
 }

@@ -35,7 +35,7 @@ def hotspots(
         HotspotOut(
             district_name=district,
             case_count=count,
-            top_crime_group_name=analytics_service.top_crime_type_for_district(db, district),
+            top_crime_group_name=None,
         )
         for district, count in rows
     ]

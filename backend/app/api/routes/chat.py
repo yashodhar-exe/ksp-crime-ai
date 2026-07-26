@@ -1,7 +1,8 @@
 import io
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import StreamingResponse
+from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
@@ -22,15 +23,16 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 
 @router.post("/query", response_model=ChatQueryResponse)
 def chat_query(
-    payload: ChatQueryRequest,
     request: Request,
+    question: str = Form(...),
+    session_id: Optional[str] = Form(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> ChatQueryResponse:
-    session_id = payload.session_id or chat_store.new_session_id()
+    session_id = session_id or chat_store.new_session_id()
 
-    chat_store.append_message(session_id, "user", payload.question)
-    response = nlp_service.answer_question(db, payload.question, session_id)
+    chat_store.append_message(session_id, "user", question)
+    response = nlp_service.answer_question(db, question, session_id)
     chat_store.append_message(session_id, "assistant", response.answer)
 
     log_action(
@@ -57,12 +59,12 @@ def chat_history(session_id: str, _: User = Depends(get_current_user)) -> ChatHi
 
 @router.post("/export")
 def chat_export(
-    payload: ChatExportRequest,
     request: Request,
+    session_id: str = Form(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> StreamingResponse:
-    messages = chat_store.get_history(payload.session_id)
+    messages = chat_store.get_history(session_id)
     if not messages:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such chat session")
 
@@ -73,7 +75,7 @@ def chat_export(
     pdf.set_font("Helvetica", "B", 14)
     pdf.cell(0, 10, "KSP Crime AI - Chat Transcript", ln=True)
     pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 8, f"Session: {payload.session_id}", ln=True)
+    pdf.cell(0, 8, f"Session: {session_id}", ln=True)
     pdf.ln(4)
 
     for m in messages:
@@ -98,5 +100,5 @@ def chat_export(
     return StreamingResponse(
         buffer,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="chat_{payload.session_id}.pdf"'},
+        headers={"Content-Disposition": f'attachment; filename="chat_{session_id}.pdf"'},
     )

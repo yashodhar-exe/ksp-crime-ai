@@ -37,13 +37,9 @@ client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   
   const token = getAccessToken();
   if (token) {
-    if (config.method?.toLowerCase() === 'get') {
-      config.params = config.params || {};
-      config.params.token = token;
-    } else {
-      config.headers = config.headers ?? {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // ALWAYS send token in query params to avoid Authorization header triggering CORS OPTIONS
+    config.params = config.params || {};
+    config.params.token = token;
   }
   return config;
 });
