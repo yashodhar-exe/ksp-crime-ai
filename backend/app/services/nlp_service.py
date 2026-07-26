@@ -111,7 +111,7 @@ def _call_gemini_rest(api_key: str, history: list, new_question: str) -> str:
         parts = content.get("parts", [])
         
         # Check if model wants to call a tool
-        MAX_TURNS = 3
+        MAX_TURNS = 5
         for turn in range(MAX_TURNS):
             if "candidates" not in data or not data["candidates"]:
                 return "Error: No response from AI."
@@ -123,38 +123,40 @@ def _call_gemini_rest(api_key: str, history: list, new_question: str) -> str:
             if not parts:
                 break
                 
-            if "functionCall" in parts[0]:
-                fc = parts[0]["functionCall"]
-                if fc["name"] == "query_database":
-                    sql_query = fc.get("args", {}).get("sql_query", "")
-                    fc_id = fc.get("id", "")
-                    tool_result = query_database(sql_query)
-                    
-                    function_response_part = {
-                        "functionResponse": {
-                            "name": "query_database",
-                            "response": {"result": tool_result}
-                        }
-                    }
-                    if fc_id:
-                        function_response_part["functionResponse"]["id"] = fc_id
-                        
-                    contents.append(content)
-                    contents.append({
-                        "role": "user",
-                        "parts": [function_response_part]
-                    })
-                    
-                    payload["contents"] = contents
-                    response = httpx.post(url, json=payload, timeout=30.0)
-                    response.raise_for_status()
-                    data = response.json()
-                    continue
+            fc_part = next((p for p in parts if "functionCall" in p), None)
+            text_part = next((p for p in parts if "text" in p), None)
             
-            if "text" in parts[0]:
-                return parts[0]["text"]
+            if fc_part:
+                fc = fc_part["functionCall"]
+                sql_query = fc.get("args", {}).get("sql_query", "")
+                fc_name = fc.get("name", "query_database")
+                tool_result = query_database(sql_query)
                 
-        return "Error: Unexpected response format or too many function calls."
+                function_response_part = {
+                    "functionResponse": {
+                        "name": fc_name,
+                        "response": {"result": tool_result}
+                    }
+                }
+                
+                contents.append(content)
+                contents.append({
+                    "role": "function",
+                    "parts": [function_response_part]
+                })
+                
+                payload["contents"] = contents
+                response = httpx.post(url, json=payload, timeout=30.0)
+                response.raise_for_status()
+                data = response.json()
+                continue
+            
+            if text_part:
+                return text_part["text"]
+                
+            return "Error: Unrecognized response format from AI."
+            
+        return "Error: I had to search the database too many times and could not find a clear answer. Please try simplifying your question."
         
     except Exception as e:
         print(f"Gemini REST error: {e}")
