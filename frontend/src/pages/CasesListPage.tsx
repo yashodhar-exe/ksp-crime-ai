@@ -93,7 +93,7 @@ export default function CasesListPage() {
                 onClick={() => setOffset(Math.max(0, offset - limit))}
                 className="px-3 py-1.5 rounded-md border border-outline-variant disabled:opacity-40"
               >
-                Previous
+                &lt;
               </button>
               <span className="text-on-surface-variant text-xs">
                 Showing {offset + 1}–{Math.min(offset + limit, data?.page.total ?? 0)} of {data?.page.total ?? 0}
@@ -103,7 +103,7 @@ export default function CasesListPage() {
                 onClick={() => setOffset(offset + limit)}
                 className="px-3 py-1.5 rounded-md border border-outline-variant disabled:opacity-40"
               >
-                Next
+                &gt;
               </button>
             </div>
           </>
