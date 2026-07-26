@@ -1,6 +1,7 @@
 import { NavLink, Link } from "react-router-dom";
 import { Icon } from "@/components/ui/Icon";
 import { useAuth } from "@/context/AuthContext";
+import kspLogo from "@/assets/Karnataka Police.svg";
 import { getRole } from "@/types/roles";
 
 const NAV_ITEMS: { to: string; label: string; icon: string }[] = [
@@ -25,7 +26,7 @@ export function Sidebar() {
   return (
     <aside className="w-[260px] h-full fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-4 z-50 shadow-sm">
       <Link to="/dashboard" className="px-6 pb-6 flex items-center gap-3 cursor-pointer">
-        <img src="/src/assets/Karnataka Police.svg" alt="Karnataka Police" className="w-10 h-10 object-contain drop-shadow-sm" />
+        <img src={kspLogo} alt="Karnataka Police" className="w-10 h-10 object-contain drop-shadow-sm" />
         <div className="leading-tight">
           <p className="text-on-surface font-bold text-sm">KSP Crime AI</p>
         </div>

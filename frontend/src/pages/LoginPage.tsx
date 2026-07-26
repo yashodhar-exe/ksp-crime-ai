@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Icon } from "@/components/ui/Icon";
+import kspLogo from "@/assets/Karnataka Police.svg";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -39,7 +40,7 @@ export default function LoginPage() {
         <div className="bg-surface-container-lowest rounded-xl p-6 flex flex-col items-center border border-card-border shadow-sm">
           <div className="mb-6 flex flex-col items-center text-center">
             <div className="w-24 h-24 mb-4 flex items-center justify-center">
-              <img src="/src/assets/Karnataka Police.svg" alt="Karnataka Police Logo" className="w-full h-full object-contain drop-shadow-md" />
+              <img src={kspLogo} alt="Karnataka Police Logo" className="w-full h-full object-contain drop-shadow-md" />
             </div>
             <h1 className="text-2xl font-semibold text-on-background mb-1">Karnataka Police</h1>
             <p className="text-sm text-on-surface-variant">KSP Crime AI</p>
