@@ -102,14 +102,7 @@ export default function AssistantPage() {
               </div>
             </div>
           ))}
-          {sending && (
-            <div className="flex justify-start">
-              <div className="ai-panel px-4 py-3 flex items-center gap-2 text-sm text-on-surface-variant">
-                <Icon name="progress_activity" className="animate-spin text-base" />
-                Thinking...
-              </div>
-            </div>
-          )}
+
           {error && (
             <div className="text-center text-sm text-error">{error}</div>
           )}
