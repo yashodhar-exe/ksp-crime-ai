@@ -1,11 +1,8 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
-let envBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://ksp-crime-ai-backend-50044345940.development.catalystappsail.in/api/v1";
-envBaseUrl = envBaseUrl.replace(/\/+$/, "");
-if (!envBaseUrl.endsWith("/api/v1")) {
-  envBaseUrl += "/api/v1";
-}
-export const API_BASE_URL = envBaseUrl;
+// Always use relative path so that Vite proxy (local) or Vercel rewrites (production)
+// handle the request without triggering CORS preflight OPTIONS requests.
+export const API_BASE_URL = "/api/v1";
 
 export const client = axios.create({
   baseURL: API_BASE_URL,
