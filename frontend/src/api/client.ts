@@ -1,7 +1,11 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "https://ksp-crime-ai-backend-50044345940.development.catalystappsail.in/api/v1";
+let envBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://ksp-crime-ai-backend-50044345940.development.catalystappsail.in/api/v1";
+envBaseUrl = envBaseUrl.replace(/\/+$/, "");
+if (!envBaseUrl.endsWith("/api/v1")) {
+  envBaseUrl += "/api/v1";
+}
+export const API_BASE_URL = envBaseUrl;
 
 export const client = axios.create({
   baseURL: API_BASE_URL,

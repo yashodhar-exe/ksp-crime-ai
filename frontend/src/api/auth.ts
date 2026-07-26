@@ -19,7 +19,11 @@ export async function logout() {
 }
 
 export async function register(username: string, password: string, roleId: string) {
-  const res = await client.post("/auth/register", { username, password, role_id: roleId });
+  const params = new URLSearchParams();
+  params.append("username", username);
+  params.append("password", password);
+  params.append("role_id", roleId);
+  const res = await client.post("/auth/register", params);
   return res.data as { user_id: string; username: string; status: string; message: string };
 }
 
