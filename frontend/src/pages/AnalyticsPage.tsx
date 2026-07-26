@@ -82,14 +82,11 @@ export default function AnalyticsPage() {
               {hotspots.data!.slice(0, 12).map((h) => (
                 <li key={h.district_name} className="flex justify-between">
                   <span>{h.district_name}</span>
-                  <span className="text-xs text-on-surface-variant">{h.case_count} cases {h.top_crime_group_name ? `· ${h.top_crime_group_name}` : ""}</span>
+                  <span className="text-xs text-on-surface-variant">{h.case_count} cases</span>
                 </li>
               ))}
             </ul>
           )}
-          <p className="text-[11px] text-on-surface-variant mt-3 pt-3 border-t border-outline-variant">
-            District-level only — no GPS coordinates in this dataset. See README "Known limitations."
-          </p>
         </div>
       </div>
 
