@@ -9,11 +9,15 @@ from app.core.security import JWTError, decode_token
 from app.db.session import get_db
 from app.models.user import User
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+from typing import Optional
+from fastapi.security import OAuth2PasswordBearer, APIKeyQuery
 
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
+query_token = APIKeyQuery(name="token", auto_error=False)
 
 def get_current_user(
-    token: str = Depends(reusable_oauth2),
+    token: Optional[str] = Depends(reusable_oauth2),
+    token_query: Optional[str] = Depends(query_token),
     db: Session = Depends(get_db),
 ) -> User:
     credentials_error = HTTPException(
@@ -21,8 +25,17 @@ def get_current_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    
+    actual_token = token or token_query
+    if not actual_token:
+        raise credentials_error
+
+    # Strip "Bearer " if present (query params might include it by mistake)
+    if actual_token.startswith("Bearer "):
+        actual_token = actual_token.replace("Bearer ", "", 1)
+        
     try:
-        payload = decode_token(token)
+        payload = decode_token(actual_token)
     except JWTError as exc:
         raise credentials_error from exc
 

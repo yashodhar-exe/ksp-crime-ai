@@ -30,6 +30,11 @@ export function clearTokens() {
 }
 
 client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  // Do not attach token for auth endpoints to prevent preflight OPTIONS requests
+  if (config.url?.startsWith('/auth/')) {
+    return config;
+  }
+  
   const token = getAccessToken();
   if (token) {
     if (config.method?.toLowerCase() === 'get') {

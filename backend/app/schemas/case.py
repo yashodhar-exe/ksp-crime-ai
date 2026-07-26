@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.schemas.common import ORMModel, Page
 
@@ -71,6 +71,11 @@ class CaseOut(ORMModel):
     case_master_id: int
     crime_no: str
     case_no: str
+    
+    @field_validator('crime_no', 'case_no', mode='before')
+    @classmethod
+    def coerce_to_str(cls, v):
+        return str(v) if v is not None else v
     crime_registered_date: date
     police_person_id: int
     police_station_id: int
@@ -116,6 +121,11 @@ class CaseListOut(BaseModel):
 class SimilarCaseOut(BaseModel):
     case_master_id: int
     crime_no: str
+    
+    @field_validator('crime_no', mode='before')
+    @classmethod
+    def coerce_to_str(cls, v):
+        return str(v) if v is not None else v
     crime_sub_head_name: Optional[str] = None
     case_status_name: Optional[str] = None
     district_name: Optional[str] = None
