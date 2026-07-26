@@ -32,8 +32,13 @@ export function clearTokens() {
 client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getAccessToken();
   if (token) {
-    config.headers = config.headers ?? {};
-    config.headers.Authorization = `Bearer ${token}`;
+    if (config.method?.toLowerCase() === 'get') {
+      config.params = config.params || {};
+      config.params.token = token;
+    } else {
+      config.headers = config.headers ?? {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
